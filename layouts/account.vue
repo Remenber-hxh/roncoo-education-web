@@ -41,6 +41,11 @@
       title: '我的课程'
     },
     {
+      name: 'account-exam',
+      icon: course,
+      title: '我的考试'
+    },
+    {
       name: 'account-collect',
       icon: collect,
       title: '我的收藏'
