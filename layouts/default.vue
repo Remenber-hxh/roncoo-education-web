@@ -1,6 +1,5 @@
 <template>
   <common-header />
-  <common-affix />
   <el-main>
     <slot />
     <common-footer />

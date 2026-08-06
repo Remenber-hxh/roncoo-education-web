@@ -186,7 +186,7 @@
     // 清除内容
     document.getElementById('player').innerHTML = ''
     if (playRes.vodPlatform === 1) {
-      // 领课云
+      // 私有云
       polyvPlayerClient = getClientForPri(playRes, courseInfo.value.speedDouble, courseInfo.value.speedDrag)
       polyvPlayerClient.on('s2j_onVideoPlay', function () {
         // 开始播放
