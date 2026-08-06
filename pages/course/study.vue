@@ -63,6 +63,7 @@
 <script setup>
   import { courseApi } from '~/api/course.js'
   import { getClient, getClientForPri } from '~/utils/polyv'
+  import { getLocalPlayer } from '~/utils/localPlayer'
 
   const route = useRoute()
 
@@ -203,6 +204,21 @@
     } else if (playRes.vodPlatform === 2) {
       // 保利威
       polyvPlayerClient = getClient(playRes, courseInfo.value.speedDouble, courseInfo.value.speedDrag)
+      polyvPlayerClient.on('s2j_onVideoPlay', function () {
+        // 开始播放
+        handleStart()
+      })
+      polyvPlayerClient.on('s2j_onVideoPause', function () {
+        // 暂停播放
+        handlePause()
+      })
+      polyvPlayerClient.on('s2j_onPlayOver', function () {
+        // 完成播放
+        handleComplete()
+      })
+    } else if (playRes.vodPlatform === 5) {
+      // 本地存储（二开新增）：原生 video 播放，接口与保利威播放器一致
+      polyvPlayerClient = getLocalPlayer(playRes, courseInfo.value.speedDouble, courseInfo.value.speedDrag)
       polyvPlayerClient.on('s2j_onVideoPlay', function () {
         // 开始播放
         handleStart()
