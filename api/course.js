@@ -25,6 +25,11 @@ export const courseApi = {
     return postRequest('/course/auth/course/view', params)
   },
 
+  // 学习心跳(二开)：播放中定期上报，服务端按天累加学习时长
+  studyHeartbeat: (params = {}) => {
+    return postRequest('/course/auth/study/heartbeat', params)
+  },
+
   // 获取播放sign
   studySign: (params = {}) => {
     return postRequest('/course/auth/course/sign', params)

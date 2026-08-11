@@ -89,6 +89,49 @@
   let progressInterval = null
   let polyvPlayerClient = null
 
+  // 学习时长心跳（二开）：progressInterval 上报的是播放位置，
+  // 这里单独上报「实际学了多少秒」，服务端按天累加，用于后台的学习时长统计。
+  let heartbeatInterval = null
+  let lastBeatAt = 0
+  const HEARTBEAT_MS = 30000
+
+  function sendHeartbeat() {
+    // 按实际经过的时间算，而不是假定固定 30 秒：
+    // 浏览器对后台标签页的 setInterval 会限流，假定固定值会多算。
+    const now = Date.now()
+    const seconds = Math.round((now - lastBeatAt) / 1000)
+    lastBeatAt = now
+    if (seconds <= 0) {
+      return
+    }
+    courseApi
+      .studyHeartbeat({
+        courseId: courseInfo.value.id,
+        periodId: studyPeriodId.value,
+        seconds
+      })
+      .catch(() => {
+        // 心跳失败不打扰学员，丢一次不影响整体统计
+      })
+  }
+
+  function startHeartbeat() {
+    stopHeartbeat(false)
+    lastBeatAt = Date.now()
+    heartbeatInterval = setInterval(sendHeartbeat, HEARTBEAT_MS)
+  }
+
+  function stopHeartbeat(flush = true) {
+    if (heartbeatInterval) {
+      clearInterval(heartbeatInterval)
+      heartbeatInterval = null
+      if (flush) {
+        // 补报最后一段不足 30 秒的时长
+        sendHeartbeat()
+      }
+    }
+  }
+
   onMounted(async () => {
     // 课程信息
     await getCourseInfo()
@@ -308,6 +351,8 @@
     progressInterval = setInterval(() => {
       handleStudyRecordForVod(1)
     }, 3000)
+    // 开始累计学习时长
+    startHeartbeat()
   }
 
   // 暂停
@@ -317,6 +362,7 @@
     if (progressInterval) {
       clearInterval(progressInterval)
     }
+    stopHeartbeat()
   }
 
   // 完成播放
@@ -327,6 +373,7 @@
     if (progressInterval) {
       clearInterval(progressInterval)
     }
+    stopHeartbeat()
 
     // 显示下一节
     showing.value = false
@@ -338,6 +385,7 @@
     if (progressInterval) {
       clearInterval(progressInterval)
     }
+    stopHeartbeat()
     if (polyvPlayerClient) {
       // 暂停学习
       handleStudyRecordForVod(2)
