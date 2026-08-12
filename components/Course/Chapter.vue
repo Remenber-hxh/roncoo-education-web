@@ -131,11 +131,13 @@
       position: relative;
       top: 6px;
       margin-right: 10px;
-      background: url(https://asset.roncoos.com/static/video.png) center center;
+      /* 二开：原为外链 roncoo CDN 的图片，内网访问不到会裂图，改用内联 SVG(data URI) */
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23409eff"><path d="M8 5v14l11-7z"/></svg>') center center no-repeat;
       background-size: 21px 21px;
 
       &.no_v {
-        background: url(https://asset.roncoos.com/static/time.png) no-repeat center center;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23909399"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 10.6V6h-2v7.4l5.2 3.1 1-1.7-4.2-2.2z"/></svg>') no-repeat center center;
+        background-size: 21px 21px;
       }
     }
 

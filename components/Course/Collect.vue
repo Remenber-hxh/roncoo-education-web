@@ -1,12 +1,16 @@
 <template>
   <div class="collect" @click="handleCollect">
-    <img v-if="!status" src="https://asset.roncoos.com/static/collect.png" alt="收藏" />
-    <img v-if="status" src="https://asset.roncoos.com/static/favorite.png" alt="已收藏" />
+    <!-- 二开：原为外链 roncoo CDN 的图片，内网访问不到会裂图，改用 Element Plus 图标 -->
+    <el-icon class="collect-icon" :class="{ on: status }" :size="20">
+      <StarFilled v-if="status" />
+      <Star v-else />
+    </el-icon>
     <span>收藏</span>
   </div>
 </template>
 
 <script setup>
+  import { Star, StarFilled } from '@element-plus/icons-vue'
   import { courseApi } from '~/api/course'
 
   const props = defineProps({
@@ -55,8 +59,12 @@
     float: right;
     margin-left: 20px;
 
-    img {
-      width: 20px;
+    .collect-icon {
+      margin-right: 4px;
+
+      &.on {
+        color: #f7ba2a;
+      }
     }
   }
 </style>

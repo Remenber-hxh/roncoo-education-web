@@ -10,7 +10,8 @@
       <span v-if="info.websitePrn">
         &nbsp;|&nbsp;
         <a :href="'https://beian.mps.gov.cn/#/query/webSearch?code=' + info.websitePrnNo" target="_blank" class="lingke_link">
-          <img src="https://asset.roncoos.com/static/emblem.png" class="prn_icon" alt="" />&nbsp;{{ info.websitePrn }}
+          <!-- 二开：原为外链 roncoo CDN 的备案徽标，内网访问不到会裂图，直接显示备案号文字 -->
+          {{ info.websitePrn }}
         </a>
       </span>
     </div>

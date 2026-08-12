@@ -6,10 +6,11 @@
           <img src="../assets/image/common_login.png" alt="" />
         </div>
         <div class="login_content">
+          <!-- 二开：原为外链 roncoo CDN 的图片，内网访问不到会裂图，改用 Element Plus 图标 -->
           <!-- 账号登录 -->
-          <img v-if="isPwdLogin && websiteInfo?.wxPcLoginEnable === '1'" src="https://asset.roncoos.com/static/qr.png" class="login_ico" @click="switchLogin" alt="" />
+          <el-icon v-if="isPwdLogin && websiteInfo?.wxPcLoginEnable === '1'" class="login_ico" :size="32" @click="switchLogin"><Grid /></el-icon>
           <!-- 扫码登录 -->
-          <img v-if="!isPwdLogin && websiteInfo?.wxPcLoginEnable === '1'" src="https://asset.roncoos.com/static/pc.png" class="login_ico" @click="switchLogin" alt="" />
+          <el-icon v-if="!isPwdLogin && websiteInfo?.wxPcLoginEnable === '1'" class="login_ico" :size="32" @click="switchLogin"><Monitor /></el-icon>
           <div v-if="isPwdLogin" class="login_pc">
             <div class="login_form">
               <div class="login_title">账号登录</div>
@@ -63,6 +64,7 @@
   </NuxtLayout>
 </template>
 <script setup>
+  import { Grid, Monitor } from '@element-plus/icons-vue'
   import { loginApi } from '~/api/login.js'
   import { encrypt, getBrowserInfo, getOsInfo } from '~/utils/base'
   import { indexApi } from '~/api'

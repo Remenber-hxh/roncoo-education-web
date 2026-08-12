@@ -13,7 +13,8 @@
       <div v-if="pathUrl !== '/search'" class="top-search">
         <el-input v-model="search" autofocus placeholder="请输入搜索内容" @keyup.enter="handleSearch">
           <template #prefix>
-            <img src="https://asset.roncoos.com/static/search.png" alt="" />
+            <!-- 二开：原为外链 roncoo CDN 的图片，内网访问不到会裂图，改用 Element Plus 图标 -->
+            <el-icon><Search /></el-icon>
           </template>
         </el-input>
       </div>

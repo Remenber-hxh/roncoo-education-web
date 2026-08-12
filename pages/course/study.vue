@@ -3,7 +3,8 @@
     <div class="video-header">
       <div class="header-left">
         <span class="cursor" @click="handleBack">
-          <img class="cursor-image" src="https://asset.roncoos.com/static/return.png" alt="return" />
+          <!-- 二开：原为外链 roncoo CDN 的图片，内网访问不到会裂图，改用 Element Plus 图标 -->
+          <el-icon class="cursor-image" :size="22"><ArrowLeftBold /></el-icon>
         </span>
         <nuxt-link :to="{ name: 'course-detail', query: { id: courseInfo?.id } }" class="left_col">
           <span class="header-course">
@@ -60,6 +61,7 @@
   </div>
 </template>
 <script setup>
+  import { ArrowLeftBold } from '@element-plus/icons-vue'
   import { courseApi } from '~/api/course.js'
   import { getClient, getClientForPri } from '~/utils/polyv'
   import { getLocalPlayer } from '~/utils/localPlayer'
