@@ -15,8 +15,7 @@
           <span>{{ two.periodName }}</span>
           <span v-if="two.resourceResp && two.resourceResp.resourceType < 3 && two.resourceResp.videoStatus === 2">{{ formatTime(two.resourceResp.videoLength) }}</span>
           <span v-if="two.resourceResp && two.resourceResp.resourceType === 3">{{ two.resourceResp.docPage }}页</span>
-          &nbsp;<span v-if="two.isFree" class="c_blue">(试看)</span>
-          <!-- 右边 -->
+                    <!-- 右边 -->
           <span v-if="two.periodType === 10 && two.periodProgress" class="video_time fr"> {{ two.periodProgress }}% </span>
         </div>
       </div>

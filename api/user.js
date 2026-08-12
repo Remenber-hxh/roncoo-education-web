@@ -6,20 +6,8 @@ export const userApi = {
     return postRequest('/course/auth/user/course/page', params)
   },
 
-  // 我的订单
-  orderPage: (params = {}) => {
-    return postRequest('/user/auth/order/info/page', params)
-  },
 
-  // 继续支付
-  continuePay: (params = {}) => {
-    return postRequest('/user/auth/order/pay/continue', params)
-  },
 
-  // 取消支付
-  cancelOrder: (params = {}) => {
-    return putRequest('/user/auth/order/pay/cancel', params)
-  },
 
   // 用户信息修改
   usersUpdate: (params = {}) => {

@@ -23,23 +23,13 @@
               <div class="view_info_course">
                 {{ courseInfo.courseName }}
               </div>
-              <div class="view_price">
-                <div>
-                  价格:<span v-if="courseInfo.coursePrice === 0">免费</span>
-                  <span v-else>
-                    ￥{{ courseInfo.coursePrice }} <b style="text-decoration-line: line-through; color: grey; font-size: 18px">￥{{ courseInfo.rulingPrice }}</b>
-                  </span>
-                </div>
-              </div>
               <div v-if="courseInfo.lecturerResp" class="view_info_item">
                 <span class="text_b">讲师名称:</span>{{ courseInfo.lecturerResp.lecturerName }}（{{ courseInfo.lecturerResp.lecturerPosition }}）
               </div>
-              <div class="view_info_item"><span class="text_b">购买人数:</span>{{ courseInfo.countBuy }} 人</div>
               <div class="view_info_item"><span class="text_b">学习人数:</span>{{ courseInfo.countStudy }} 人</div>
               <div class="foot_box">
                 <button v-if="courseInfo.allowStudy === 1" class="buy_btn" @click="handleStudy">马上学习</button>
-                <button v-else-if="courseInfo.isFree === 0" class="buy_btn" @click="handleBuy(courseInfo)">立即购买</button>
-                <button v-else-if="courseInfo.isFree === 1" class="buy_btn" @click="handleLogin">登录观看</button>
+                <button v-else class="buy_btn" @click="handleLogin">登录观看</button>
                 <div class="handle_info_btn">
                   <div class="collect_btn">
                     <course-collect :course-id="courseInfo.id" :collect-status="courseInfo.courseCollect" />
@@ -88,7 +78,6 @@
         </div>
       </div>
     </div>
-    <common-pay ref="commonPayRef" @refresh="handleCourse" />
   </NuxtLayout>
 </template>
 <script setup>
@@ -113,26 +102,6 @@
       { hid: 'description', name: 'description', content: courseInfo.value?.lecturerResp?.introduce }
     ]
   })
-
-  const commonPayRef = ref()
-
-  // 购买
-  function handleBuy(courseInfo) {
-    if (getToken()) {
-      // 购买
-      commonPayRef.value.onOpen(courseInfo)
-    } else {
-      setStorage('history', window.location.href, 5)
-      ElMessageBox.confirm('请先登录', '提示', { confirmButtonText: '立即登录', cancelButtonText: '取消', type: 'warning' }).then(() => {
-        useRouter().push('/login')
-      })
-    }
-  }
-
-  // 课程详情
-  async function handleCourse() {
-    window.location.reload()
-  }
 
   // 学习
   function handleStudy() {

@@ -14,7 +14,6 @@
             <nuxt-link :to="{ name: 'account-collect' }"> 我的收藏 </nuxt-link>
           </el-dropdown-item>
           <el-dropdown-item>
-            <nuxt-link :to="{ name: 'account-order' }"> 我的订单 </nuxt-link>
           </el-dropdown-item>
           <el-dropdown-item>
             <nuxt-link :to="{ name: 'account-user' }"> 个人信息 </nuxt-link>

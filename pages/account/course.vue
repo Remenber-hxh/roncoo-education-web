@@ -6,7 +6,7 @@
           <template #default="scope">
             <img v-if="scope.row.courseResp" :src="scope.row.courseResp?.courseLogo" :alt="scope.row.courseResp?.courseName" class="course-img" />
             <div v-if="scope.row.courseResp" class="course-info">
-              <div class="course-info-title">{{ scope.row.courseResp?.courseName }}<span v-if="scope.row.courseResp?.isFree === 1" style="margin: 0">【免费课】</span></div>
+              <div class="course-info-title">{{ scope.row.courseResp?.courseName }}</div>
               <div v-if="scope.row.periodName" class="course-info-title">学习至：{{ scope.row.periodName }}（{{ scope.row.periodProgress }}%）| {{ scope.row.periodTime }}</div>
               <div v-if="scope.row.courseProgress" class="course-info-title" style="width: 300px">
                 <el-progress :percentage="scope.row.courseProgress" :status="scope.row.courseProgress > 99 ? 'success' : ''" />

@@ -40,15 +40,7 @@ export const courseApi = {
     return postRequest('/course/api/user/study/progress', params)
   },
 
-  // 创建订单
-  createOrder: (params = {}) => {
-    return postRequest('/user/auth/order/pay/create', params)
-  },
 
-  // 订单信息
-  orderInfoView: (orderNo) => {
-    return getRequest('/user/auth/order/info/view?orderNo=' + orderNo)
-  },
 
   // 课程评论添加
   courseCommentAdd: (params = {}) => {

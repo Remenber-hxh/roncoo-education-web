@@ -50,12 +50,7 @@
       icon: collect,
       title: '我的收藏'
     },
-    {
-      name: 'account-order',
-      icon: order,
-      title: '我的订单'
-    },
-    {
+        {
       name: 'account-user',
       icon: user,
       title: '个人信息'

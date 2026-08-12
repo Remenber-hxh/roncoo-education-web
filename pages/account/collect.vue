@@ -5,8 +5,7 @@
         <template #default="scope">
           <img :src="scope.row.courseResp?.courseLogo" :alt="scope.row.courseResp?.courseName" class="course-img" />
           <div class="course-info">
-            <div class="course-info-title">{{ scope.row.courseResp?.courseName }}<span v-if="scope.row.courseResp?.isFree === 1" style="margin: 0">【免费课】</span></div>
-            <div>购买人数：{{ scope.row.courseResp?.countBuy }}</div>
+            <div class="course-info-title">{{ scope.row.courseResp?.courseName }}</div>
             <div>学习人数：{{ scope.row.courseResp?.countStudy }}</div>
           </div>
         </template>

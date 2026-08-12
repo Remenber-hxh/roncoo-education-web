@@ -7,10 +7,6 @@
         <img :src="course.courseLogo" alt="" />
         <div class="course_name" v-html="course.courseName" />
         <div class="course_desc">
-          <div v-if="course.coursePrice === 0" class="price_box">免费</div>
-          <div v-else class="price_box">
-            ￥{{ course.coursePrice }} <span style="text-decoration-line: line-through; font-size: 12px">￥{{ course.rulingPrice }}</span>
-          </div>
           <div class="collect">
             <course-collect :course-id="course.id" />
           </div>

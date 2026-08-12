@@ -43,7 +43,6 @@
                     <span v-if="two.periodType === 10">{{ getResourceTypeName(two.resourceResp?.resourceType) }}：</span>
                     {{ index + 1 }}-{{ num + 1 }} {{ two.periodName }}
                     <span v-if="two.resourceResp && two.resourceResp.resourceType < 3 && two.resourceResp.videoStatus === 1">(未更新)</span>
-                    <span v-if="two.isFree">(试看)</span>
                     <div v-if="two.periodType === 10" class="period-progress">
                       <el-progress v-if="two" :percentage="two.periodProgress ? two.periodProgress : 0" :stroke-width="2" :status="two.periodProgress > 99 ? 'success' : ''" />
                     </div>

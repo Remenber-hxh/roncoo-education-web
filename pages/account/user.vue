@@ -9,10 +9,6 @@
                 {{ userInfo.mobile }}
                 <span style="margin-left: 20px; color: #999">不可修改</span>
               </el-form-item>
-              <el-form-item label="余额：">
-                ￥{{ userInfo.availableAmount }}元&nbsp;&nbsp;
-                <!--<el-button type="danger" size="small" @click="onDevelop"> 充 值 </el-button>-->
-              </el-form-item>
               <el-form-item label="昵称：">
                 <el-input v-model="userInfo.nickname" size="large" placeholder="请输入昵称" />
               </el-form-item>
