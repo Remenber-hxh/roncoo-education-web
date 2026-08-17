@@ -89,10 +89,16 @@
     }
   }
 
+  /* 同 default.vue：固定高度改为 min-height + flex，避免内容不足一屏时页脚下方留大片空白 */
   .el-main {
     padding: 20px 0 0;
-    overflow: auto;
     margin: 70px auto 0;
-    height: calc(100vh - 70px);
+    min-height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main {
+    flex: 1;
   }
 </style>
