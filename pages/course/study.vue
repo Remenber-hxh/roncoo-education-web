@@ -20,8 +20,28 @@
     <div class="video-body">
       <div class="video-content" :class="{ show_panel: cateType }">
         <div class="player-box">
+          <!-- 图文课时（二开）：正文阅读区，带进度条与签署确认 -->
+          <div v-if="article.show" class="article-wrap">
+            <div class="article-progress">
+              <span>阅读进度</span>
+              <el-progress :percentage="article.percent" :stroke-width="10" style="flex: 1; margin: 0 12px" />
+              <span v-if="article.completed" class="article-done">已完成</span>
+            </div>
+            <div class="article-body" v-html="article.content" />
+            <div v-if="article.needSign === 1" class="article-sign">
+              <template v-if="article.signed">
+                <span class="article-signed">✓ 你已签署确认本文件</span>
+              </template>
+              <template v-else>
+                <el-button type="primary" :disabled="!article.completed" @click="handleArticleSign">
+                  {{ article.completed ? '我已阅读并确认' : '请先读完全文' }}
+                </el-button>
+                <span class="article-sign-tip">签署将记录你的确认时间，作为培训留痕</span>
+              </template>
+            </div>
+          </div>
           <!-- 播放器 -->
-          <div v-show="showing" id="player" v-loading="loading" class="player-video" />
+          <div v-show="showing && !article.show" id="player" v-loading="loading" class="player-video" />
           <div v-show="!showing" class="study-tip">
             <div v-if="nextPeriod">
               下一节：{{ nextPeriod?.periodName }}
@@ -122,6 +142,100 @@
     heartbeatInterval = setInterval(sendHeartbeat, HEARTBEAT_MS)
   }
 
+  // ---------- 图文课时（二开新增）----------
+  const article = reactive({
+    show: false,
+    content: '',
+    needSign: 0,
+    signed: false,
+    readSeconds: 0,
+    percent: 0,
+    completed: false
+  })
+  let articleTimer = null
+  let articleLastReport = 0
+
+  /**
+   * 展示图文正文。
+   * 完成判定和视频不同：视频有"播完"这个信号，图文没有，
+   * 用「滚动到底 + 停留够时长」双条件，服务端最终裁决。
+   */
+  function showArticle(studyRes) {
+    article.show = true
+    article.content = studyRes.content || ''
+    article.needSign = studyRes.needSign || 0
+    article.signed = !!studyRes.signed
+    article.readSeconds = studyRes.readSeconds || 0
+    article.percent = Number(studyRes.progress) || 0
+    article.completed = article.percent >= 100
+
+    showing.value = false
+    stopArticleTracking()
+    articleLastReport = Date.now()
+
+    nextTick(() => {
+      const box = document.querySelector('.article-body')
+      if (box) {
+        box.scrollTop = 0
+        box.addEventListener('scroll', onArticleScroll)
+      }
+      // 每 15 秒上报一次，服务端累计停留时长
+      articleTimer = setInterval(reportArticleRead, 15000)
+    })
+  }
+
+  function onArticleScroll(e) {
+    const el = e.target
+    const total = el.scrollHeight - el.clientHeight
+    // 内容不足一屏时（total<=0）视为已看完
+    const p = total <= 0 ? 100 : Math.round(((el.scrollTop + el.clientHeight) / el.scrollHeight) * 100)
+    if (p > article.percent) {
+      article.percent = Math.min(100, p)
+    }
+  }
+
+  async function reportArticleRead() {
+    if (!article.show || !studyPeriodId.value) return
+    const now = Date.now()
+    const stay = Math.round((now - articleLastReport) / 1000)
+    articleLastReport = now
+    try {
+      const res = await courseApi.articleRead({
+        periodId: studyPeriodId.value,
+        percent: article.percent,
+        staySeconds: stay
+      })
+      if (res === 'COMPLETE') {
+        article.completed = true
+        article.percent = 100
+        await getCourseInfo()
+      }
+    } catch (e) {
+      // 上报失败不打扰阅读
+    }
+  }
+
+  function stopArticleTracking() {
+    if (articleTimer) {
+      clearInterval(articleTimer)
+      articleTimer = null
+    }
+    const box = document.querySelector('.article-body')
+    if (box) box.removeEventListener('scroll', onArticleScroll)
+  }
+
+  async function handleArticleSign() {
+    try {
+      // 先把最新进度报上去，避免刚读完就点签署时服务端还认为没读完
+      await reportArticleRead()
+      await courseApi.articleSign({ periodId: studyPeriodId.value })
+      article.signed = true
+      ElMessage.success('签署成功')
+    } catch (e) {
+      // 错误提示由请求拦截器统一弹出
+    }
+  }
+
   function stopHeartbeat(flush = true) {
     if (heartbeatInterval) {
       clearInterval(heartbeatInterval)
@@ -163,6 +277,14 @@
     studyPeriodId.value = studyRes.periodId
     userStudy.studyId = studyRes.studyId
     userStudy.resourceId = studyRes.resourceId
+
+    // 图文课时（二开）：正文直接在返回里，不走资源与播放器
+    if (studyRes.periodType === 30) {
+      handleClear()
+      showArticle(studyRes)
+      loading.value = false
+      return
+    }
 
     // 资源类型
     if (studyRes.resourceType <= 2) {
@@ -387,6 +509,12 @@
       clearInterval(progressInterval)
     }
     stopHeartbeat()
+    // 图文：切换课时或离开前补报一次，避免最后一段阅读时长丢失
+    if (article.show) {
+      reportArticleRead()
+      stopArticleTracking()
+      article.show = false
+    }
     if (polyvPlayerClient) {
       // 暂停学习
       handleStudyRecordForVod(2)
@@ -441,6 +569,76 @@
 
         .player-video {
           height: calc(100vh - 86px);
+        }
+
+        /* 图文课时阅读区（二开） */
+        .article-wrap {
+          height: calc(100vh - 86px);
+          display: flex;
+          flex-direction: column;
+          background: #fff;
+          border-radius: 8px;
+        }
+
+        .article-progress {
+          display: flex;
+          align-items: center;
+          padding: 12px 24px;
+          border-bottom: 1px solid #eee;
+          font-size: 13px;
+          color: #666;
+          flex-shrink: 0;
+        }
+
+        .article-done {
+          color: #67c23a;
+          font-weight: 600;
+        }
+
+        /* 正文自己滚动，滚动比例即阅读进度 */
+        .article-body {
+          flex: 1;
+          overflow-y: auto;
+          padding: 24px 32px;
+          line-height: 1.9;
+          font-size: 15px;
+          color: #333;
+
+          :deep(img) {
+            max-width: 100%;
+            height: auto;
+          }
+          :deep(table) {
+            border-collapse: collapse;
+            width: 100%;
+            th,
+            td {
+              border: 1px solid #ddd;
+              padding: 8px;
+            }
+          }
+          :deep(a) {
+            color: #409eff;
+          }
+        }
+
+        .article-sign {
+          padding: 16px 24px;
+          border-top: 1px solid #eee;
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+        }
+
+        .article-sign-tip {
+          margin-left: 12px;
+          color: #999;
+          font-size: 12px;
+        }
+
+        .article-signed {
+          color: #67c23a;
+          font-weight: 600;
         }
 
         .study-tip {

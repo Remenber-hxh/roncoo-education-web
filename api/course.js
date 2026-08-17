@@ -30,6 +30,16 @@ export const courseApi = {
     return postRequest('/course/auth/study/heartbeat', params)
   },
 
+  // 图文课时(二开)：上报阅读进度
+  articleRead: (params = {}) => {
+    return postRequest('/course/auth/article/read', params)
+  },
+
+  // 图文课时(二开)：签署确认
+  articleSign: (params = {}) => {
+    return postRequest('/course/auth/article/sign?periodId=' + params.periodId)
+  },
+
   // 获取播放sign
   studySign: (params = {}) => {
     return postRequest('/course/auth/course/sign', params)
