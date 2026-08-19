@@ -125,9 +125,12 @@
     color: #999;
     font-size: 14px;
     .detail_body {
-      width: 1200px;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 16px;
+      box-sizing: border-box;
       margin: 0 auto;
-      height: 373px;
+      min-height: 373px;
     }
     .detail_header {
       .detail_title {
@@ -148,8 +151,12 @@
       overflow: hidden;
       .detail_view {
         float: left;
-        width: 504px;
-        height: 280px;
+        // 原为写死 504x280（16:9）。平板宽度下 504+650 放不进容器，
+        // 改为按比例占宽，高度由 16:9 推出。
+        width: 42%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
         background-size: 100%;
         border-radius: 5px;
 
@@ -162,8 +169,9 @@
       }
       .view_info {
         float: right;
-        width: 650px;
-        height: 270px;
+        // 原为写死 650px，同上改为按比例占宽（与封面 42% 之间留 3% 间距）
+        width: 55%;
+        min-height: 270px;
         position: relative;
 
         .view_info_item {
@@ -237,7 +245,9 @@
     margin: 20px 0;
     overflow: hidden;
     .layout_left {
-      width: 920px;
+      // 原为写死 920px。容器加了左右内边距后可用宽度不足 1180，
+      // 右侧 260px 的讲师栏会被挤到下一行，故改为按剩余宽度计算。
+      width: calc(100% - 280px);
       float: left;
       .introduce {
         font-size: 14px;
@@ -276,6 +286,62 @@
         .info_box {
           clear: both;
         }
+      }
+    }
+  }
+
+  // ============================================================
+  // 手机适配（二开）
+  //
+  // 原来靠 float + 写死像素（封面 504、右侧信息 650、正文 920、侧栏 260）
+  // 拼出两栏。窄屏放不下这些宽度，必须取消浮动改为上下堆叠。
+  // ============================================================
+  @media (max-width: 768px) {
+    .detail_content {
+      .detail_body {
+        height: auto;
+      }
+
+      .detail_header {
+        .detail_title {
+          line-height: 40px;
+          font-size: 13px;
+          max-width: 100%;
+        }
+      }
+
+      .video_box {
+        .detail_view {
+          float: none;
+          width: 100%;
+          height: auto;
+          aspect-ratio: 16 / 9;
+          object-fit: cover;
+
+          // 手机上没有「小窗跟随」的空间，跟随时会挡住正文，直接按常规位置显示
+          &.float_win {
+            position: static;
+          }
+        }
+
+        .view_info {
+          float: none;
+          width: 100%;
+          height: auto;
+          margin-top: 12px;
+        }
+      }
+    }
+
+    .course_info {
+      .layout_left,
+      .layout_right {
+        float: none;
+        width: 100%;
+      }
+
+      .layout_right {
+        margin-top: 16px;
       }
     }
   }

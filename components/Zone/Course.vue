@@ -23,7 +23,9 @@
 </script>
 <style lang="scss" scoped>
   .i_content {
-    width: 1200px;
+    // 原为写死 1200px，窄屏会撑破视口
+    width: 100%;
+    max-width: 1200px;
     margin: 0 0 30px 0;
     background: #f6f8fb;
     .i_zone {

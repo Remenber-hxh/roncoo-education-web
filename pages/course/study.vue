@@ -734,4 +734,126 @@
       }
     }
   }
+
+  // ============================================================
+  // 手机适配（二开）
+  //
+  // 原布局是「左侧播放区 + 右侧目录侧栏」横向并排，且播放区高度写死
+  // calc(100vh - 86px)。手机上侧栏会把播放区挤成一条，视频几乎看不见。
+  // 改为上下堆叠：播放区按 16:9 显示在上，目录在下方正常滚动。
+  // ============================================================
+  @media (max-width: 768px) {
+    .video-header {
+      height: auto;
+      padding: 8px 0;
+      flex-wrap: wrap;
+
+      .header-left {
+        margin-left: 10px;
+
+        .header-course {
+          margin-left: 10px;
+          font-size: 14px;
+        }
+      }
+
+      .header-right {
+        margin-right: 10px;
+      }
+    }
+
+    .video-body {
+      .video-content {
+        // 横向并排改为纵向堆叠
+        flex-direction: column;
+        flex-wrap: wrap;
+
+        .player-box {
+          width: 100%;
+          padding: 0;
+          box-sizing: border-box;
+
+          // 视频按 16:9 而不是占满一屏高，下方要留给目录
+          .player-video {
+            height: auto;
+            aspect-ratio: 16 / 9;
+          }
+
+          // 图文正文给足高度，但不霸占整屏
+          .article-wrap {
+            height: auto;
+            min-height: 60vh;
+            border-radius: 0;
+          }
+
+          .article-body {
+            padding: 16px;
+            font-size: 15px;
+          }
+
+          .article-sign {
+            padding: 12px 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+          }
+
+          .article-sign-tip {
+            margin-left: 0;
+          }
+
+          .study-tip {
+            height: 120px;
+          }
+        }
+
+        .video-info {
+          width: 100%;
+          // 目录标签页原本竖排在右侧，手机上改为横排在目录上方
+          flex-direction: column;
+
+          .video-info-tab {
+            width: 100%;
+            margin-top: 0;
+            display: flex;
+            flex-direction: row;
+
+            .video-info-button {
+              flex: 1;
+              flex-direction: row;
+              justify-content: center;
+              gap: 6px;
+              padding: 12px 0;
+              font-size: 14px;
+
+              .img-icon {
+                width: 18px;
+              }
+            }
+          }
+
+          .video-info-content {
+            width: 100%;
+            box-sizing: border-box;
+            height: auto;
+            max-height: 50vh;
+            padding: 12px;
+
+            .catalog-chapter-period {
+              margin: 10px 0;
+
+              // 原写死 350px/300px，窄屏会溢出
+              .period-name {
+                width: 100%;
+              }
+
+              .period-progress {
+                width: calc(100% - 30px);
+                margin-left: 20px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 </style>

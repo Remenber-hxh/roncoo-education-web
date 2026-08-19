@@ -53,4 +53,29 @@
       line-height: 33px;
     }
   }
+
+  // 手机：同「我的课程」，封面改为占满一行、文字允许换行
+  @media (max-width: 768px) {
+    .course-img {
+      float: none;
+      display: block;
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+    .course-info {
+      float: none;
+      .course-info-title {
+        max-width: 100%;
+        white-space: normal;
+      }
+      div {
+        margin-left: 0;
+        height: auto;
+        line-height: 20px;
+      }
+    }
+  }
 </style>

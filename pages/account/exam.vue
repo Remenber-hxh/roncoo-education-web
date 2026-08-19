@@ -58,7 +58,8 @@
         </el-tab-pane>
       </el-tabs>
 
-      <el-dialog v-model="paperDialog" title="选择试卷" width="560px">
+      <!-- 宽度用 min()，手机上按视口收窄，避免 560px 撑出屏幕 -->
+      <el-dialog v-model="paperDialog" title="选择试卷" width="min(560px, 92vw)">
         <el-table v-loading="paperLoading" :data="papers">
           <el-table-column label="试卷" min-width="180" prop="paperName" />
           <el-table-column align="center" label="总分" prop="totalScore" width="60" />

@@ -31,6 +31,7 @@
   </el-header>
 </template>
 <script setup>
+  import { Search } from '@element-plus/icons-vue'
   import { indexApi } from '~/api/index.js'
   import { getStorage, setStorage } from '~/utils/storage.js'
 
@@ -94,8 +95,12 @@
   }
 
   .top {
-    width: 1200px;
-    min-width: 1200px;
+    // 原为 width/min-width 均 1200px。min-width 禁止头部收窄，
+    // 是手机上整页横向溢出的元凶，改为最大宽度限制。
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 16px;
+    box-sizing: border-box;
     height: 70px;
 
     display: flex;
@@ -105,6 +110,7 @@
     .top-nav {
       display: flex;
       align-items: center;
+      flex-shrink: 0;
 
       .top-nav-title {
         margin-left: 30px;
@@ -113,6 +119,11 @@
     }
 
     .top-search {
+      // 中间搜索框吸收剩余空间，窄屏时自动变窄而不是把两侧挤出去
+      flex: 1;
+      min-width: 0;
+      margin: 0 16px;
+
       .el-input {
         height: 35px;
         line-height: 35px;
@@ -125,6 +136,8 @@
     }
 
     .top-user {
+      flex-shrink: 0;
+
       img {
         border-radius: 50%;
       }
@@ -138,6 +151,32 @@
     img {
       height: 35px;
       width: auto;
+    }
+  }
+
+  // 手机：导航项和搜索框都放不下，隐藏导航文字与搜索，只留 Logo 和用户入口。
+  // 课程入口在首页和底部都有，藏掉顶部导航不影响主链路。
+  @media (max-width: 768px) {
+    .top {
+      padding: 0 12px;
+
+      .top-nav {
+        .top-nav-title {
+          display: none;
+        }
+      }
+
+      .top-search {
+        display: none;
+      }
+
+      .top-user a {
+        font-size: 14px;
+      }
+
+      img {
+        height: 28px;
+      }
     }
   }
 </style>

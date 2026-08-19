@@ -242,15 +242,18 @@
 <style lang="scss" scoped>
   .login_body {
     background-color: #2256f7;
-    height: calc(100vh - 130px);
+    min-height: calc(100vh - 130px);
 
     .login_box {
-      width: 1400px;
+      width: 100%;
+      max-width: 1400px;
+      padding: 20px 16px;
+      box-sizing: border-box;
       margin: 0 auto;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100%;
+      min-height: calc(100vh - 130px);
     }
 
     .login_logo {
@@ -262,7 +265,8 @@
     .login_content {
       float: right;
       width: 400px;
-      height: 480px;
+      max-width: 100%;
+      min-height: 480px;
       background-color: #fff;
       border-radius: 10px;
 
@@ -323,6 +327,34 @@
   .var-img {
     margin-left: 20px;
     width: 80px;
+  }
+
+  // 手机：左侧宣传图占掉一半空间放不下，隐藏后让登录框独占
+  @media (max-width: 768px) {
+    .login_body {
+      .login_logo {
+        display: none;
+      }
+
+      .login_content {
+        float: none;
+        width: 100%;
+      }
+
+      .login_pc,
+      .login_app {
+        padding: 0 20px !important;
+      }
+    }
+
+    // 登录按钮原本靠 100px 上边距推到底部，窄屏下会把内容顶出可视区
+    .login-button {
+      margin-top: 30px !important;
+    }
+
+    .var-input {
+      width: calc(100% - 110px);
+    }
   }
 
   .el-input {

@@ -27,13 +27,17 @@
   .friend {
     clear: both;
     background-color: rgb(51, 51, 51);
-    height: 30px;
+    // 原为写死 30px，窄屏下友链会换行被截断
+    min-height: 30px;
     width: 100%;
+    overflow: hidden;
 
     .friend_link {
-      width: 1200px;
+      width: 100%;
+      max-width: 1200px;
+      padding: 10px 16px 0;
+      box-sizing: border-box;
       margin: 0 auto;
-      padding: 10px 0 0;
 
       div {
         float: left;

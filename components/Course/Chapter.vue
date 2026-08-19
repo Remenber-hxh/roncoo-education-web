@@ -61,7 +61,10 @@
   }
 
   .chapter_info {
-    width: 839px;
+    // 原为写死 839px，放在窄屏的课程详情里会横向溢出
+    width: 100%;
+    max-width: 839px;
+    box-sizing: border-box;
     font-size: 14px;
     border-bottom: 1px solid #ccc;
     margin: 0 auto 30px;

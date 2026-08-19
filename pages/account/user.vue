@@ -4,7 +4,7 @@
       <el-tab-pane :name="1" label="基本资料">
         <el-form :model="userInfo" label-width="60px" style="max-width: 600px">
           <el-row>
-            <el-col :span="16">
+            <el-col :xs="24" :sm="16">
               <el-form-item label="手机：">
                 {{ userInfo.mobile }}
                 <span style="margin-left: 20px; color: #999">不可修改</span>
@@ -173,6 +173,32 @@
       font-size: 16px;
       display: flex;
       align-items: center;
+    }
+  }
+
+  // 手机：表单原本左右各 40px 内缩（.el-form 与 .el-form-item 各 20px），
+  // 窄屏下输入框会被挤得很短，这里收掉横向留白
+  @media (max-width: 768px) {
+    .el-form {
+      margin: 10px 0;
+      .el-form-item {
+        margin: 16px 0;
+      }
+    }
+
+    .account-setting {
+      width: 100%;
+      margin: 12px auto;
+    }
+
+    .setting {
+      img {
+        padding: 10px;
+        width: 40px;
+      }
+      .setting-info {
+        font-size: 14px;
+      }
     }
   }
 </style>

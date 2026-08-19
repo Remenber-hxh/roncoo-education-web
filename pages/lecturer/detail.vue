@@ -38,10 +38,12 @@
     color: #fff;
 
     .lecturer-info {
-      width: 1200px;
+      width: 100%;
+      max-width: 1200px;
+      box-sizing: border-box;
       margin: 0 auto;
       border-radius: 10px;
-      padding: 20px;
+      padding: 20px 16px;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -49,6 +51,7 @@
         width: 150px;
         height: 150px;
         border-radius: 50%;
+        flex-shrink: 0;
       }
       .item-info {
         margin-left: 20px;
@@ -60,8 +63,31 @@
 
   .course {
     .course-info {
-      width: 1200px;
+      width: 100%;
+      max-width: 1200px;
+      box-sizing: border-box;
+      padding: 0 16px;
       margin: 0 auto;
+    }
+  }
+
+  // 手机：头像 150px + 简介横排会挤，改为上下堆叠并缩小头像
+  @media (max-width: 768px) {
+    .lecturer {
+      .lecturer-info {
+        flex-direction: column;
+        text-align: center;
+
+        img {
+          width: 90px;
+          height: 90px;
+        }
+
+        .item-info {
+          margin-left: 0;
+          margin-top: 12px;
+        }
+      }
     }
   }
 </style>

@@ -2,7 +2,8 @@
   <!-- 暂没数据 -->
   <div v-if="props.list.length === 0" class="no-data">暂无数据</div>
   <el-row v-else class="zone_body" :gutter="20">
-    <el-col v-for="(course, int) in props.list" :key="int" :span="6" class="zone_body_course">
+    <!-- 响应式栅格：手机1列、大手机/小平板2列、平板3列、桌面4列 -->
+    <el-col v-for="(course, int) in props.list" :key="int" :xs="24" :sm="12" :md="8" :lg="6" class="zone_body_course">
       <nuxt-link target="_blank" :to="{ name: 'course-detail', query: { id: course.id } }">
         <img :src="course.courseLogo" alt="" />
         <div class="course_name" v-html="course.courseName" />
@@ -26,7 +27,7 @@
 <style lang="scss" scoped>
   .zone_body {
     .zone_body_course {
-      height: 255px;
+      // 原为固定 255px；封面改成按宽度等比缩放后，卡片高度也要跟着自适应
       border-radius: 6px;
       margin: 10px 0;
 
@@ -81,8 +82,11 @@
       }
     }
     img {
-      width: 285px;
-      height: 158px;
+      // 原为写死 285x158，窄屏会溢出卡片。改为占满卡片宽度并保持 16:9
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
       border-radius: 6px 6px 0 0;
     }
   }

@@ -56,4 +56,31 @@
       white-space: nowrap;
     }
   }
+
+  // 手机：封面 180px + 文字 + 200px 的操作列放不下一行，缩小封面并让文字换行显示
+  @media (max-width: 768px) {
+    .course-img {
+      float: none;
+      display: block;
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+    .course-info {
+      float: none;
+      .course-info-title {
+        margin-left: 0;
+        max-width: 100%;
+        height: auto;
+        line-height: 20px;
+        white-space: normal;
+      }
+      // 模板里给进度条写死了 300px 内联宽度，窄屏要收回来
+      .course-info-title[style] {
+        width: 100% !important;
+      }
+    }
+  }
 </style>

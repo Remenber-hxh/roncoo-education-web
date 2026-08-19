@@ -78,7 +78,9 @@
   }
 
   .search-info {
-    width: 500px;
+    // 原为写死 500px，窄屏会溢出
+    width: 100%;
+    max-width: 500px;
     margin: 0 auto;
     .search-input {
       margin: 10px auto;

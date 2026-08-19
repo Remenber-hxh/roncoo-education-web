@@ -22,7 +22,9 @@
 <style lang="scss" scoped>
   .banner {
     position: relative;
-    width: 1200px;
+    // 原为写死 1200px，窄屏会撑破视口
+    width: 100%;
+    max-width: 1200px;
     margin: 20px auto;
     display: flex;
     justify-content: space-between;
@@ -34,6 +36,18 @@
         height: 100%;
         //border-radius: 0 10px 10px 0;
         border-radius: 10px;
+      }
+    }
+  }
+
+  // 手机：360px 高的轮播在 375 宽的屏上几乎是正方形，图会被裁得只剩中间一条。
+  // el-carousel 的高度是内联样式，只能用 !important 覆盖。
+  @media (max-width: 768px) {
+    .banner {
+      margin: 12px auto;
+
+      .carousel :deep(.el-carousel__container) {
+        height: 180px !important;
       }
     }
   }

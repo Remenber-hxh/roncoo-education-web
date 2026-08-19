@@ -37,10 +37,15 @@
   .footer-bottom {
     background: rgb(51, 51, 51);
     z-index: 999;
+    // 版权和备案号在窄屏会换行，固定高度会把第二行裁掉
+    height: auto;
+    min-height: 60px;
+    padding: 5px 12px;
+    box-sizing: border-box;
   }
 
   .copyright {
-    height: 20px;
+    min-height: 20px;
     line-height: 20px;
     text-align: center;
     padding-top: 5px;
@@ -52,7 +57,7 @@
   }
 
   .icp_num {
-    height: 30px;
+    min-height: 30px;
     line-height: 30px;
     text-align: center;
     color: #ccc;

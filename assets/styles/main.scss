@@ -1,19 +1,52 @@
+// ============================================================
+// 响应式改造（二开）
+//
+// 原本是一套固定 1200px 的 PC 布局：body 锁死 100vh 且禁止滚动，
+// 内容容器 .main 写死 1200px，头部还带 min-width:1200px。
+// 手机上（375px 宽）整页横向溢出，只能左右拖着看，
+// 而十月要接企业微信工作台，打开的就是手机 H5。
+//
+// 断点取值：
+//   768px  以下按手机处理（企业微信内嵌基本都在这个区间）
+//   1024px 以下按平板处理
+// ============================================================
+$bp-mobile: 768px;
+$bp-pad: 1024px;
+
 body {
   margin: 0;
   padding: 0;
   font-size: 12px;
   background-color: #f6f8fb;
-  height: 100vh;
-  overflow: hidden;
+  // 原为 height:100vh + overflow:hidden，页面级滚动被关掉、滚动交给内部容器。
+  // 手机上地址栏收缩、软键盘弹出都会打乱 100vh 的计算，故放开由页面自然滚动。
+  min-height: 100vh;
   word-break: break-all;
 }
 a {
   text-decoration: none;
   color: inherit;
 }
+// 全站内容容器：宽屏时最大 1200px 居中，窄屏时占满并留出边距
 .main {
-  width: 1200px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+// 供各页面复用的窄屏工具类
+@media (max-width: $bp-mobile) {
+  // 窄屏下隐藏（如 PC 才显示的次要信息）
+  .hide-mobile {
+    display: none !important;
+  }
+  // 原本左右分栏的区块，窄屏改为上下堆叠
+  .stack-mobile {
+    display: block !important;
+    width: 100% !important;
+  }
 }
 .pagination {
   display: flex;

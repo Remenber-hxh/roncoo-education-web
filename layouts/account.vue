@@ -101,4 +101,58 @@
   .main {
     flex: 1;
   }
+
+  // ============================================================
+  // 手机适配（二开）
+  //
+  // 原为「左侧 200px 菜单 + 右侧内容」两栏。375px 的屏上菜单要吃掉一半宽度，
+  // 改为菜单横排在顶部、内容占满整宽。
+  // el-affix 会把菜单吸顶固定，横排后会盖住正文，这里把它还原成随页面滚动。
+  // ============================================================
+  @media (max-width: 768px) {
+    .main {
+      flex-direction: column;
+    }
+
+    .el-aside {
+      width: 100%;
+      margin-right: 0;
+      min-height: auto;
+
+      :deep(.el-affix) {
+        height: auto !important;
+      }
+
+      :deep(.el-affix > div) {
+        position: static !important;
+        width: auto !important;
+      }
+
+      ul {
+        display: flex;
+        padding: 4px;
+        // 菜单项多时可横向滑动，不换行也不溢出页面
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+
+        a {
+          flex-shrink: 0;
+        }
+
+        li {
+          margin: 4px;
+          height: 42px;
+          line-height: 42px;
+          font-size: 14px;
+          padding: 0 12px !important;
+        }
+      }
+    }
+
+    .account {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 16px 12px;
+    }
+  }
 </style>

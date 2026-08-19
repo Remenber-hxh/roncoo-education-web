@@ -280,4 +280,61 @@
     border-radius: 8px;
     padding: 60px;
   }
+
+  // 手机：标题和倒计时挤在一行会把倒计时压没，改为上下两行；
+  // 内边距同步收窄，题干才有足够宽度。
+  @media (max-width: 768px) {
+    .exam-page {
+      margin: 12px auto 24px;
+      padding: 0 12px;
+    }
+    .exam-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px 16px;
+      .exam-title {
+        font-size: 16px;
+      }
+      .exam-meta {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .exam-timer {
+        margin-left: 0;
+        font-size: 16px;
+      }
+    }
+    .exam-body {
+      padding: 8px 16px 20px;
+    }
+    .question {
+      .q-options {
+        margin-left: 0;
+      }
+      // 选项文字长时要能换行，否则会顶出容器
+      :deep(.el-radio),
+      :deep(.el-checkbox) {
+        white-space: normal;
+        height: auto;
+        margin-right: 0;
+        line-height: 22px;
+        padding: 6px 0;
+      }
+      :deep(.el-radio__label),
+      :deep(.el-checkbox__label) {
+        white-space: normal;
+        word-break: break-all;
+      }
+    }
+    .result-card {
+      padding: 24px 16px;
+      .result-score {
+        font-size: 44px;
+      }
+    }
+    .exam-loading {
+      padding: 40px 16px;
+    }
+  }
 </style>
