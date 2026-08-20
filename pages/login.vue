@@ -26,7 +26,10 @@
                   <img class="var-img" :src="verImg" @click="getCaptcha" />
                 </el-form-item>
                 <div class="login-info">
-                  <el-checkbox v-model="loginForm.isAgreement" size="default"> 登录即同意<span class="blue_text" @click="loginForm.visible = true">《隐私政策》</span> </el-checkbox>
+                  <!-- 链接在 checkbox 的 label 里，点它默认会连带切换勾选状态，故 stop+prevent -->
+                  <el-checkbox v-model="loginForm.isAgreement" size="default">
+                    登录即同意<span class="blue_text" @click.stop.prevent="agreementVisible = true">《隐私政策》</span>
+                  </el-checkbox>
                   <nuxt-link :to="{ name: 'reset' }">
                     <div class="login-info-reset">忘记密码？</div>
                   </nuxt-link>
@@ -60,6 +63,7 @@
           </div>
         </div>
       </div>
+      <common-agreement v-model="agreementVisible" type="privacy" />
     </div>
   </NuxtLayout>
 </template>
@@ -74,6 +78,9 @@
   const route = useRoute()
   const loading = ref(false)
   const binding = ref(false)
+
+  // 隐私政策弹窗
+  const agreementVisible = ref(false)
 
   // 是否为密码登录
   const isPwdLogin = ref(true)
@@ -304,6 +311,17 @@
 
       .login-info-reset {
         color: #2256f6;
+      }
+
+      // 原项目引用了 .blue_text 但全局没有定义，链接看起来跟普通文字一样，
+      // 没有任何可点击的提示
+      .blue_text {
+        color: #2256f6;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
 
