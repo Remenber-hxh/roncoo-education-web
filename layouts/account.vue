@@ -20,6 +20,7 @@
     </el-container>
     <common-footer />
   </el-main>
+  <common-tab-bar />
 </template>
 <script setup>
   import course from 'assets/svg/account/course.svg'
@@ -110,6 +111,12 @@
   // el-affix 会把菜单吸顶固定，横排后会盖住正文，这里把它还原成随页面滚动。
   // ============================================================
   @media (max-width: 768px) {
+    // 给固定定位的底部标签栏垫出高度，否则会盖住页面末尾
+    .el-main {
+      margin-top: 58px;
+      padding-bottom: calc(52px + env(safe-area-inset-bottom));
+    }
+
     .main {
       flex-direction: column;
     }

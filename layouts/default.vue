@@ -6,6 +6,7 @@
     </div>
     <common-footer />
   </el-main>
+  <common-tab-bar />
 </template>
 <script setup></script>
 <style lang="scss" scoped>
@@ -25,5 +26,14 @@
 
   .page-content {
     flex: 1;
+  }
+
+  // 底部标签栏是固定定位，不占文档流，
+  // 不给页面垫出这段高度，页脚和最后一条内容会被它盖住
+  @media (max-width: 768px) {
+    .el-main {
+      margin-top: 58px;
+      padding-bottom: calc(52px + env(safe-area-inset-bottom));
+    }
   }
 </style>
