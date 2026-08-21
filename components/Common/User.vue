@@ -2,8 +2,8 @@
   <client-only>
     <el-dropdown>
       <span class="el-dropdown-link">
-        <img v-if="userInfo?.userHead" class="header-image" :src="userInfo.userHead" alt="头像" />
-        <img v-else class="header-image" src="../../assets/image/common_head.jpg" alt="头像" />
+        <!-- 原来没头像时用一张通用人头图，谁看都一样。改成姓名首字，能认出是自己 -->
+        <common-avatar :url="userInfo?.userHead" :name="userInfo?.nickname" :size="35" />
       </span>
       <template #dropdown>
         <el-dropdown-menu>

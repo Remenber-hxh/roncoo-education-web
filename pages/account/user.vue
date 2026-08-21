@@ -23,7 +23,7 @@
               <el-row>
                 <el-col :span="4">
                   <el-form-item>
-                    <img :src="userInfo.userHead" style="height: 100px; width: auto" />
+                    <common-avatar :url="userInfo.userHead" :name="userInfo.nickname" :size="100" />
                   </el-form-item>
                 </el-col>
               </el-row>

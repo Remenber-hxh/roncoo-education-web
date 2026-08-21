@@ -8,7 +8,7 @@
     <div class="course_comment_list clearfix">
       <div v-for="(comment, index) in page.list" :key="index" class="course_comment_item">
         <div class="course_comment_cover">
-          <img :src="comment.usersVO.userHead" class="comment_cover_img" alt="" />
+          <common-avatar :url="comment.usersVO.userHead" :name="comment.usersVO.nickname" :size="50" />
         </div>
         <div class="course_comment_content">
           <div class="course_comment_user">
@@ -89,10 +89,7 @@
     }
     .course_comment_cover {
       margin-right: 20px;
-      .comment_cover_img {
-        border-radius: 50%;
-        width: 50px;
-      }
+      // 头像改用 common-avatar 组件后，.comment_cover_img 已无元素引用，故移除
     }
 
     .course_comment_content {
