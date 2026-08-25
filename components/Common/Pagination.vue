@@ -7,13 +7,15 @@
     :total="props.total"
     :background="true"
     :page-sizes="[20, 50, 100, 200]"
-    layout="total, sizes, prev, pager, next, jumper"
+    :layout="layout"
+    :pager-count="isMobile ? 5 : 7"
+    :small="isMobile"
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
   />
 </template>
 <script setup>
-  import { computed } from 'vue'
+  import { computed, onMounted, onUnmounted, ref } from 'vue'
 
   const props = defineProps({
     // 总条目数
@@ -32,6 +34,18 @@
       default: 20
     }
   })
+
+  // 手机上塞不下 6 个部件：实测 375px 屏宽下整条分页有 412px，
+  // 右侧「前往第几页」被裁在屏外，点不到。窄屏只保留翻页本身。
+  const isMobile = ref(false)
+  const layout = computed(() => (isMobile.value ? 'prev, pager, next' : 'total, sizes, prev, pager, next, jumper'))
+
+  const syncMobile = () => (isMobile.value = window.innerWidth <= 768)
+  onMounted(() => {
+    syncMobile()
+    window.addEventListener('resize', syncMobile)
+  })
+  onUnmounted(() => window.removeEventListener('resize', syncMobile))
 
   const emit = defineEmits(['update:current-page', 'update:page-size', 'pagination'])
   const currentPage = computed({
