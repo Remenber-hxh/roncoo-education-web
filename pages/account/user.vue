@@ -12,6 +12,16 @@
               <el-form-item label="昵称：">
                 <el-input v-model="userInfo.nickname" size="large" placeholder="请输入昵称" />
               </el-form-item>
+              <!-- 性别在后端是必填（AuthUsersReq 上有 @NotNull），
+                   但表单里一直没有这一项，点保存必然报「请选择性别」，
+                   而员工又无处可选，等于个人资料根本改不了 -->
+              <el-form-item label="性别：">
+                <el-radio-group v-model="userInfo.userSex">
+                  <el-radio :value="1">男</el-radio>
+                  <el-radio :value="2">女</el-radio>
+                  <el-radio :value="3">保密</el-radio>
+                </el-radio-group>
+              </el-form-item>
               <el-form-item label="生日：">
                 <el-date-picker v-model="userInfo.userAge" value-format="YYYY-MM-DD" format="YYYY-MM-DD" type="date" placeholder="请选择出生日期" />
               </el-form-item>
@@ -132,19 +142,26 @@
     })
   }
 
+  // 校验项与后端 AuthUsersReq 上的注解保持一致：
+  // 昵称 @NotBlank、性别 @NotNull、生日 @NotNull。
+  // 原来这里只校验了昵称，还拿日期去比 userAge < 0（永远为 false，等于没校验），
+  // 结果是前端放行、后端打回，员工只看到一句没头没尾的错误提示。
   const onSubmit = () => {
     if (!userInfo.value.nickname) {
       ElMessage.warning('请输入昵称')
       return
     }
-
-    if (userInfo.value.userAge < 0) {
-      ElMessage.warning('请输入正确的年龄')
+    if (userInfo.value.userSex === undefined || userInfo.value.userSex === null) {
+      ElMessage.warning('请选择性别')
+      return
+    }
+    if (!userInfo.value.userAge) {
+      ElMessage.warning('请选择生日')
       return
     }
 
     userApi.usersUpdate(userInfo.value).then((res) => {
-      ElMessage.info(res)
+      ElMessage.success(res)
     })
   }
 </script>
