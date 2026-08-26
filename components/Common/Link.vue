@@ -9,19 +9,8 @@
   </div>
 </template>
 <script setup>
-  import { indexApi } from '~/api/index.js'
-  import { getStorage, setStorage } from '~/utils/storage.js'
-
-  const friendLinkList = ref()
-  onMounted(() => {
-    friendLinkList.value = getStorage('WebsiteLink')
-    if (!friendLinkList.value) {
-      indexApi.websiteLink().then((res) => {
-        setStorage('WebsiteLink', res, 60)
-        friendLinkList.value = res
-      })
-    }
-  })
+  // 友链同样不再走 localStorage 缓存，后台改完下次打开就生效
+  const friendLinkList = useWebsiteLink()
 </script>
 <style lang="scss" scoped>
   .friend {

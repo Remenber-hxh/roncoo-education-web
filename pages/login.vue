@@ -68,11 +68,19 @@
   </NuxtLayout>
 </template>
 <script setup>
+
   import { Grid, Monitor } from '@element-plus/icons-vue'
   import { loginApi } from '~/api/login.js'
   import { encrypt, getBrowserInfo, getOsInfo } from '~/utils/base'
   import { indexApi } from '~/api'
   import { login } from '~/utils/login'
+
+  // 关键词里的站点名取自「参数配置」，不再写死。
+  // useWebsiteInfo 必须在 setup 顶层调用——它内部是 useAsyncData，
+  // 放进 computed 会在每次求值时重新调用组合式函数。
+  const seoSite = useWebsiteInfo()
+  const siteKeywords = computed(() => (seoSite.value?.websiteName || '内部培训平台') + '、员工培训、在线学习、在线考试')
+
 
   const router = useRouter()
   const route = useRoute()
@@ -106,7 +114,7 @@
   useHead({
     title: '用户登录',
     meta: [
-      { hid: 'keywords', name: 'keywords', content: '内部培训平台、员工培训、在线学习、在线考试' },
+      { hid: 'keywords', name: 'keywords', content: siteKeywords },
       { hid: 'description', name: 'description', content: websiteInfo.value?.websiteDesc }
     ]
   })

@@ -13,8 +13,6 @@
 </template>
 
 <script setup>
-  import { indexApi } from '~/api/index.js'
-  import { getStorage, setStorage } from '~/utils/storage.js'
 
   const props = defineProps({
     modelValue: {
@@ -43,32 +41,12 @@
   const title = computed(() => TYPE_MAP[props.type].title)
   const emptyTip = computed(() => `管理员尚未设置${title.value}内容`)
 
-  const info = ref({})
-  const loading = ref(false)
+  // 与 Header/Footer 共用同一份站点信息。
+  // 原来这里自己读写 localStorage，管理员刚在后台录完隐私政策，
+  // 员工端最长要等一小时才看得到。
+  const info = useWebsiteInfo()
+  const loading = computed(() => !info.value)
   const content = computed(() => info.value?.[TYPE_MAP[props.type].field] || '')
-
-  // 与 Header/Footer 一致：优先用本地缓存的站点信息，缓存未命中再请求。
-  // 登录页在 Header 之外单独用到，不能假定缓存一定已写入。
-  async function loadInfo() {
-    if (content.value) return
-    const cached = getStorage('WebsiteInfo')
-    if (cached) {
-      info.value = cached
-      if (content.value) return
-    }
-    loading.value = true
-    try {
-      const res = await indexApi.websiteInfo()
-      setStorage('WebsiteInfo', res, 60)
-      info.value = res
-    } finally {
-      loading.value = false
-    }
-  }
-
-  onMounted(loadInfo)
-  // 首次打开时若仍无内容再取一次，避免缓存里是旧的空值
-  watch(show, (v) => v && loadInfo())
 </script>
 
 <style lang="scss" scoped>

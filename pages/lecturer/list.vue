@@ -12,9 +12,17 @@
   </NuxtLayout>
 </template>
 <script setup>
+
   import useTable from '~/utils/table.js'
   import { indexApi } from '~/api'
   import { lecturerApi } from '~/api/lecturer'
+
+  // 关键词里的站点名取自「参数配置」，不再写死。
+  // useWebsiteInfo 必须在 setup 顶层调用——它内部是 useAsyncData，
+  // 放进 computed 会在每次求值时重新调用组合式函数。
+  const seoSite = useWebsiteInfo()
+  const siteKeywords = computed(() => (seoSite.value?.websiteName || '内部培训平台') + '、员工培训、在线学习、在线考试')
+
 
   // 分页查询
   const { page, handlePage } = useTable({
@@ -27,7 +35,7 @@
   useHead({
     title: '讲师列表',
     meta: [
-      { hid: 'keywords', name: 'keywords', content: '内部培训平台、员工培训、在线学习、在线考试' },
+      { hid: 'keywords', name: 'keywords', content: siteKeywords },
       { hid: 'description', name: 'description', content: data.value?.websiteDesc }
     ]
   })

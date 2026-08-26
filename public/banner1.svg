@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="500" viewBox="0 0 1920 500">
+  <!--
+    纯背景，不再把标题画进图里。
+    原来图上直接写着「内部培训学习平台」，后台在参数配置里改了网站名称，
+    首页 Banner 还是老名字，只能重新做图。
+    现在标题改由 Banner.vue 用轮播记录的 carousel_title 叠加渲染，
+    后台改标题即时生效。
+  -->
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#2873f0"/>
@@ -9,6 +16,4 @@
   <circle cx="1600" cy="120" r="220" fill="#ffffff" opacity="0.08"/>
   <circle cx="1750" cy="380" r="140" fill="#ffffff" opacity="0.10"/>
   <circle cx="200" cy="420" r="180" fill="#ffffff" opacity="0.06"/>
-  <text x="960" y="220" fill="#ffffff" font-family="Microsoft YaHei, sans-serif" font-size="64" font-weight="bold" text-anchor="middle">内部培训学习平台</text>
-  <text x="960" y="300" fill="#ffffff" font-family="Microsoft YaHei, sans-serif" font-size="28" opacity="0.9" text-anchor="middle">新员工入职培训 · 在线学习 · 在线考试</text>
 </svg>

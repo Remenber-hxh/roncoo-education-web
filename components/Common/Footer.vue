@@ -18,20 +18,8 @@
   </el-footer>
 </template>
 <script setup>
-  import { indexApi } from '~/api/index.js'
-  import { getStorage, setStorage } from '~/utils/storage.js'
-
-  // 网站信息
-  const info = ref({})
-  onMounted(() => {
-    info.value = getStorage('WebsiteInfo')
-    if (!info.value) {
-      indexApi.websiteInfo().then((res) => {
-        setStorage('WebsiteInfo', res, 60)
-        info.value = res
-      })
-    }
-  })
+  // 与 Header 共用同一份取数结果，不再各拉一次、也不再落 localStorage
+  const info = useWebsiteInfo()
 </script>
 <style lang="scss" scoped>
   .footer-bottom {

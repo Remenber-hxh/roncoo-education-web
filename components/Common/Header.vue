@@ -32,14 +32,12 @@
 </template>
 <script setup>
   import { Search } from '@element-plus/icons-vue'
-  import { indexApi } from '~/api/index.js'
-  import { getStorage, setStorage } from '~/utils/storage.js'
 
-  // 网站信息
-  const info = ref({})
-  // 导航信息
-  const nav = ref([])
-  //
+  // 站点信息与导航改走统一取数，不再各自往 localStorage 缓存 60 分钟，
+  // 否则后台改了名称/Logo/导航，员工端最长要等一小时才变
+  const info = useWebsiteInfo()
+  const nav = useWebsiteNav()
+
   const loginStatus = ref(false)
 
   // 搜索
@@ -48,23 +46,7 @@
   const activeUrl = ref(useRoute().path)
 
   onMounted(() => {
-    // 站点信息
-    info.value = getStorage('WebsiteInfo')
-    if (!info.value) {
-      indexApi.websiteInfo().then((res) => {
-        setStorage('WebsiteInfo', res, 60)
-        info.value = res
-      })
-    }
-
-    // 导航信息
-    nav.value = getStorage('WebsiteNav')
-    if (!nav.value) {
-      indexApi.websiteNav().then((res) => {
-        setStorage('WebsiteNav', res, 60)
-        nav.value = res
-      })
-    }
+    // 登录态只能在客户端判断：token 存在 cookie 里，SSR 阶段读不到
     const token = getToken()
     if (token) {
       loginStatus.value = true

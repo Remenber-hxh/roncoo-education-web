@@ -3,8 +3,15 @@
     <div class="carousel">
       <el-carousel height="360px">
         <el-carousel-item v-for="(item, index) in carouselList" :key="index">
-          <a :href="item.carouselUrl" :title="item.carouselTitle" :target="item.carouselTarget">
-            <img :src="item.carouselImg" alt="item.carouselTitle" />
+          <a class="slide" :href="item.carouselUrl" :title="item.carouselTitle" :target="item.carouselTarget">
+            <img :src="item.carouselImg" :alt="item.carouselTitle" />
+            <!-- 标题叠在图上渲染，不再烧进图片里。
+                 原来 banner1.svg 直接把「内部培训学习平台」画在图上，
+                 后台改了轮播标题也不会变，只能重新做图。 -->
+            <!-- 轮播表只有 carousel_title，没有副标题字段 -->
+            <div v-if="item.carouselTitle" class="slide-caption">
+              <div class="slide-title">{{ item.carouselTitle }}</div>
+            </div>
           </a>
         </el-carousel-item>
       </el-carousel>
@@ -30,13 +37,41 @@
     justify-content: space-between;
     .carousel {
       width: 100%;
-      //margin-left: 200px;
+
+      .slide {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
       img {
         width: 100%;
         height: 100%;
-        //border-radius: 0 10px 10px 0;
+        object-fit: cover;
         border-radius: 10px;
       }
+
+      .slide-caption {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        text-align: center;
+        color: #fff;
+        padding: 0 24px;
+        // 浅色图上也要看得清
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+      }
+
+      .slide-title {
+        font-size: 44px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
     }
   }
 
@@ -48,6 +83,11 @@
 
       .carousel :deep(.el-carousel__container) {
         height: 180px !important;
+      }
+
+      // 44px 的标题在 375px 屏上会撑破，跟着缩
+      .slide-title {
+        font-size: 22px;
       }
     }
   }
