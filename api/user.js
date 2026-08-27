@@ -14,6 +14,11 @@ export const userApi = {
     return postRequest('/user/auth/users/edit', params)
   },
 
+  // 只更新头像。edit 接口要求昵称/性别/生日都非空，换头像不该被这些挡住
+  usersUpdateHead: (params = {}) => {
+    return postRequest('/user/auth/users/head', params)
+  },
+
   // 用户信息
   getUserInfo: () => {
     return getRequest('/user/auth/users/view')

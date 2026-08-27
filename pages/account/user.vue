@@ -31,9 +31,18 @@
             </el-col>
             <el-row>
               <el-row>
-                <el-col :span="4">
+                <el-col :span="8">
                   <el-form-item>
-                    <common-avatar :url="userInfo.userHead" :name="userInfo.nickname" :size="100" />
+                    <!-- 头像原来只是展示，没法换。上传接口后端本来就有
+                         （/system/auth/upload/pic），缺的是这里的入口。 -->
+                    <div class="avatar-box">
+                      <div v-loading="avatarUploading" class="avatar-click" @click="pickAvatar">
+                        <common-avatar :url="userInfo.userHead" :name="userInfo.nickname" :size="100" />
+                        <div class="avatar-mask">更换头像</div>
+                      </div>
+                      <input ref="avatarInput" type="file" accept="image/*" class="avatar-input" @change="onAvatarChange" />
+                      <div class="avatar-tip">支持 JPG/PNG，2M 以内</div>
+                    </div>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -81,6 +90,7 @@
 </template>
 <script setup>
   import { userApi } from '~/api/user.js'
+  import { uploadApi } from '~/api/upload.js'
   import { ElMessage } from 'element-plus'
   import { ref } from 'vue'
   import { indexApi } from '~/api'
@@ -109,6 +119,54 @@
   // 获取用户信息
   const getUserInfo = async () => {
     userInfo.value = await userApi.getUserInfo()
+  }
+
+  // ===== 头像上传 =====
+  const avatarInput = ref()
+  const avatarUploading = ref(false)
+  const MAX_AVATAR_SIZE = 2 * 1024 * 1024
+
+  const pickAvatar = () => {
+    if (avatarUploading.value) {
+      return
+    }
+    avatarInput.value.click()
+  }
+
+  const onAvatarChange = async (e) => {
+    const file = e.target.files && e.target.files[0]
+    // 选完先把 input 清空，否则连续选同一张图不会再触发 change
+    e.target.value = ''
+    if (!file) {
+      return
+    }
+    if (!file.type.startsWith('image/')) {
+      ElMessage.warning('请选择图片文件')
+      return
+    }
+    if (file.size > MAX_AVATAR_SIZE) {
+      ElMessage.warning('图片不能超过 2M')
+      return
+    }
+
+    avatarUploading.value = true
+    try {
+      const url = await uploadApi.uploadPic(file)
+      if (!url) {
+        ElMessage.error('上传失败，未拿到图片地址')
+        return
+      }
+      // 上传成功只是拿到地址，还要写回用户资料才算换好。
+      // 走专用的 updateHead 而不是 usersUpdate：后者要求昵称、性别、生日
+      // 都非空，没填过生日的员工换头像会被打回，而他在这一步也没法补。
+      // 这里单独提交，不要求用户再去点「保存设置」——
+      // 点了头像就该立刻生效，不然会以为没换上。
+      await userApi.usersUpdateHead({ userHead: url })
+      userInfo.value.userHead = url
+      ElMessage.success('头像已更新')
+    } finally {
+      avatarUploading.value = false
+    }
   }
 
   // 绑定
@@ -193,9 +251,57 @@
     }
   }
 
+  // 头像可点击更换，悬停时压一层提示
+  .avatar-box {
+    text-align: center;
+  }
+
+  .avatar-click {
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    line-height: 0;
+
+    .avatar-mask {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 30px;
+      line-height: 30px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    &:hover .avatar-mask {
+      opacity: 1;
+    }
+  }
+
+  // 原生 file 选择框藏起来，点头像时用代码触发
+  .avatar-input {
+    display: none;
+  }
+
+  .avatar-tip {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #909399;
+  }
+
   // 手机：表单原本左右各 40px 内缩（.el-form 与 .el-form-item 各 20px），
   // 窄屏下输入框会被挤得很短，这里收掉横向留白
   @media (max-width: 768px) {
+    // 手机没有 hover，遮罩要常驻，否则看不出头像能点
+    .avatar-click .avatar-mask {
+      opacity: 1;
+    }
+
     .el-form {
       margin: 10px 0;
       .el-form-item {
