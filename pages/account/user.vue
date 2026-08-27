@@ -2,9 +2,10 @@
   <NuxtLayout name="account">
     <el-tabs v-model="activeName">
       <el-tab-pane :name="1" label="基本资料">
-        <el-form :model="userInfo" label-width="60px" style="max-width: 600px">
-          <el-row>
-            <el-col :xs="24" :sm="16">
+        <!-- 原来表单整体限宽 600px，头像排在右边也放不下 -->
+        <el-form :model="userInfo" label-width="60px" class="profile-form">
+          <el-row :gutter="24">
+            <el-col :xs="24" :sm="15">
               <el-form-item label="手机：">
                 {{ userInfo.mobile }}
                 <span style="margin-left: 20px; color: #999">不可修改</span>
@@ -29,24 +30,20 @@
                 <el-button type="primary" size="large" @click="onSubmit"> 保存设置 </el-button>
               </el-form-item>
             </el-col>
-            <el-row>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item>
-                    <!-- 头像原来只是展示，没法换。上传接口后端本来就有
-                         （/system/auth/upload/pic），缺的是这里的入口。 -->
-                    <div class="avatar-box">
-                      <div v-loading="avatarUploading" class="avatar-click" @click="pickAvatar">
-                        <common-avatar :url="userInfo.userHead" :name="userInfo.nickname" :size="100" />
-                        <div class="avatar-mask">更换头像</div>
-                      </div>
-                      <input ref="avatarInput" type="file" accept="image/*" class="avatar-input" @change="onAvatarChange" />
-                      <div class="avatar-tip">支持 JPG/PNG，2M 以内</div>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-row>
+            <!-- 头像原来只是展示，没法换。上传接口后端本来就有
+                 （/system/auth/upload/pic），缺的是这里的入口。
+                 之前这块被 el-col 外面套的两层 el-row 挤到了表单下方——
+                 el-row 是 width:100% 的块级栅格行，作为 el-col 的兄弟会独占一整行。 -->
+            <el-col :xs="24" :sm="9">
+              <div class="avatar-box">
+                <div v-loading="avatarUploading" class="avatar-click" @click="pickAvatar">
+                  <common-avatar :url="userInfo.userHead" :name="userInfo.nickname" :size="100" />
+                  <div class="avatar-mask">更换头像</div>
+                </div>
+                <input ref="avatarInput" type="file" accept="image/*" class="avatar-input" @change="onAvatarChange" />
+                <div class="avatar-tip">支持 JPG / PNG，2M 以内</div>
+              </div>
+            </el-col>
           </el-row>
         </el-form>
       </el-tab-pane>
@@ -251,9 +248,15 @@
     }
   }
 
+  // 表单整体限宽，避免宽屏下输入框拉得过长；头像列跟着一起限制
+  .profile-form {
+    max-width: 860px;
+  }
+
   // 头像可点击更换，悬停时压一层提示
   .avatar-box {
     text-align: center;
+    padding-top: 8px;
   }
 
   .avatar-click {
@@ -292,6 +295,8 @@
     margin-top: 8px;
     font-size: 12px;
     color: #909399;
+    // 不让它在窄列里折成「支持 JPG/PNG，2」+「M 以内」两行
+    white-space: nowrap;
   }
 
   // 手机：表单原本左右各 40px 内缩（.el-form 与 .el-form-item 各 20px），
