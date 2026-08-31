@@ -45,13 +45,10 @@
     page: noticeApi.list
   })
 
-  const unread = ref(0)
+  // 与侧边栏角标共用同一份状态，这里改了那边立刻跟着变
+  const unread = useUnreadCount()
 
-  const loadUnread = async () => {
-    unread.value = (await noticeApi.unread()) || 0
-  }
-
-  onMounted(loadUnread)
+  onMounted(refreshUnread)
 
   const formatTime = (t) => {
     if (!t) return ''

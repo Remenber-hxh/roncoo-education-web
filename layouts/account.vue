@@ -30,7 +30,6 @@
   import collect from 'assets/svg/account/collect.svg'
   import order from 'assets/svg/account/order.svg'
   import user from 'assets/svg/account/user.svg'
-  import { noticeApi } from '~/api/notice.js'
 
   useHead({
     title: '用户中心'
@@ -68,15 +67,10 @@
   ]
 
   // 未读角标。放在布局里而不是消息页里，这样在「我的课程」等
-  // 任意个人中心页面都能看到有没有新催办
-  const unread = ref(0)
-  onMounted(async () => {
-    try {
-      unread.value = (await noticeApi.unread()) || 0
-    } catch (e) {
-      // 取角标失败不该影响页面本身，静默即可
-    }
-  })
+  // 任意个人中心页面都能看到有没有新催办。
+  // 用共享状态而不是本地 ref：消息页标记已读后，这里的角标要跟着变
+  const unread = useUnreadCount()
+  onMounted(refreshUnread)
 </script>
 <style lang="scss" scoped>
   .account {
