@@ -7,7 +7,10 @@
           <client-only>
             <el-menu :default-active="defaultActive">
               <nuxt-link v-for="(item, index) in menuList" :key="index" :to="{ name: item.name }">
-                <el-menu-item :index="item.name"> <img :src="item.icon" class="img-icon" /> {{ item.title }} </el-menu-item>
+                <el-menu-item :index="item.name">
+                  <img :src="item.icon" class="img-icon" /> {{ item.title }}
+                  <el-badge v-if="item.name === 'account-notice' && unread > 0" :value="unread" :max="99" class="menu-badge" />
+                </el-menu-item>
               </nuxt-link>
             </el-menu>
           </client-only>
@@ -27,6 +30,7 @@
   import collect from 'assets/svg/account/collect.svg'
   import order from 'assets/svg/account/order.svg'
   import user from 'assets/svg/account/user.svg'
+  import { noticeApi } from '~/api/notice.js'
 
   useHead({
     title: '用户中心'
@@ -47,16 +51,32 @@
       title: '我的考试'
     },
     {
+      name: 'account-notice',
+      icon: order,
+      title: '我的消息'
+    },
+    {
       name: 'account-collect',
       icon: collect,
       title: '我的收藏'
     },
-        {
+    {
       name: 'account-user',
       icon: user,
       title: '个人信息'
     }
   ]
+
+  // 未读角标。放在布局里而不是消息页里，这样在「我的课程」等
+  // 任意个人中心页面都能看到有没有新催办
+  const unread = ref(0)
+  onMounted(async () => {
+    try {
+      unread.value = (await noticeApi.unread()) || 0
+    } catch (e) {
+      // 取角标失败不该影响页面本身，静默即可
+    }
+  })
 </script>
 <style lang="scss" scoped>
   .account {
@@ -87,6 +107,11 @@
     .img-icon {
       width: 20px;
       margin-right: 5px;
+    }
+    // 角标跟在文字后面，不要顶到菜单项外面去
+    .menu-badge {
+      margin-left: 8px;
+      transform: translateY(-2px);
     }
   }
 
