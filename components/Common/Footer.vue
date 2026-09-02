@@ -1,25 +1,53 @@
 <template>
   <el-footer v-if="info" class="footer-bottom">
-    <div v-if="info.websiteCopyright" class="copyright">
-      <span v-html="info.websiteCopyright" />
+    <div class="foot-line">
+      <span class="site-name">{{ info.websiteName || '培训平台' }}</span>
+      <span class="sep">·</span>
+      <span class="scope">内部培训系统，仅供在职员工使用</span>
     </div>
-    <div class="icp_num">
-      <span v-if="info.websiteIcp">
-        <a href="https://beian.miit.gov.cn/" target="_blank" class="lingke_link">{{ info.websiteIcp }}</a>
-      </span>
-      <span v-if="info.websitePrn">
-        &nbsp;|&nbsp;
-        <a :href="'https://beian.mps.gov.cn/#/query/webSearch?code=' + info.websitePrnNo" target="_blank" class="lingke_link">
+
+    <div class="foot-line links">
+      <a href="javascript:;" @click="openDoc('privacy')">隐私政策</a>
+      <span class="sep">|</span>
+      <a href="javascript:;" @click="openDoc('about')">关于我们</a>
+      <span class="sep">|</span>
+      <span class="help">使用问题请联系人力资源部</span>
+    </div>
+
+    <div class="foot-line dim">
+      <span v-html="info.websiteCopyright || '璟邑科技'" />
+      <span class="sep">·</span>
+      <span>© {{ year }}</span>
+      <!-- 备案号在有值时才显示。内部系统在没对外开放前是空的，
+           挂个空链接反而显得没配好 -->
+      <template v-if="info.websiteIcp">
+        <span class="sep">·</span>
+        <a href="https://beian.miit.gov.cn/" target="_blank">{{ info.websiteIcp }}</a>
+      </template>
+      <template v-if="info.websitePrn">
+        <span class="sep">·</span>
+        <a :href="'https://beian.mps.gov.cn/#/query/webSearch?code=' + info.websitePrnNo" target="_blank">
           <!-- 二开：原为外链 roncoo CDN 的备案徽标，内网访问不到会裂图，直接显示备案号文字 -->
           {{ info.websitePrn }}
         </a>
-      </span>
+      </template>
     </div>
+
+    <common-agreement v-model="docShow" :type="docType" />
   </el-footer>
 </template>
 <script setup>
   // 与 Header 共用同一份取数结果，不再各拉一次、也不再落 localStorage
   const info = useWebsiteInfo()
+
+  const year = new Date().getFullYear()
+
+  const docShow = ref(false)
+  const docType = ref('privacy')
+  const openDoc = (type) => {
+    docType.value = type
+    docShow.value = true
+  }
 </script>
 <style lang="scss" scoped>
   .footer-bottom {
@@ -32,36 +60,61 @@
     box-sizing: border-box;
   }
 
-  .copyright {
-    min-height: 20px;
-    line-height: 20px;
+  .foot-line {
     text-align: center;
-    padding-top: 5px;
-    color: #ccc;
+    line-height: 24px;
+    color: #c8c9cc;
+    font-size: 13px;
 
     a {
-      color: #ccc;
-    }
-  }
-
-  .icp_num {
-    min-height: 30px;
-    line-height: 30px;
-    text-align: center;
-    color: #ccc;
-
-    .lingke_link {
-      color: #ccc;
+      color: #c8c9cc;
 
       &:hover {
+        color: #fff;
         text-decoration: underline;
       }
     }
   }
 
-  .prn_icon {
-    width: 12px;
-    height: 12px;
-    position: relative;
+  .site-name {
+    color: #f0f0f0;
+    font-weight: 500;
+  }
+
+  .scope {
+    font-size: 12px;
+  }
+
+  .sep {
+    margin: 0 8px;
+    color: #6b6b6b;
+  }
+
+  .help {
+    font-size: 12px;
+  }
+
+  // 版权与备案号是次要信息，压暗一档，视觉重心留给上面两行
+  .dim {
+    color: #8c8c8c;
+    font-size: 12px;
+
+    a {
+      color: #8c8c8c;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .footer-bottom {
+      padding: 10px 12px;
+    }
+    // 手机上「仅供在职员工使用」这类补充说明换行会占掉两行，直接收起
+    .scope,
+    .help {
+      display: none;
+    }
+    .site-name + .sep {
+      display: none;
+    }
   }
 </style>

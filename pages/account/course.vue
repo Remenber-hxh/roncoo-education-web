@@ -4,7 +4,12 @@
       <el-table v-loading="page.loading" :border="false" :data="page.list" :show-header="false">
         <el-table-column label="课程">
           <template #default="scope">
-            <img v-if="scope.row.courseResp" :src="scope.row.courseResp?.courseLogo" :alt="scope.row.courseResp?.courseName" class="course-img" />
+            <course-cover
+              v-if="scope.row.courseResp"
+              :src="scope.row.courseResp?.courseLogo"
+              :name="scope.row.courseResp?.courseName"
+              class="course-img"
+            />
             <div v-if="scope.row.courseResp" class="course-info">
               <div class="course-info-title">{{ scope.row.courseResp?.courseName }}</div>
               <div v-if="scope.row.periodName" class="course-info-title">学习至：{{ scope.row.periodName }}（{{ scope.row.periodProgress }}%）| {{ scope.row.periodTime }}</div>

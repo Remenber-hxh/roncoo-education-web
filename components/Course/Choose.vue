@@ -85,4 +85,41 @@
       }
     }
   }
+
+  // ============================================================
+  // 手机适配（二开）
+  //
+  // 六个模块在 375px 屏上会折成两行，而「一级分类：」这个标签
+  // 是 flex 的第一项、没有 flex-shrink 限制，被右侧挤得只剩半截。
+  // 手机上把标签藏掉（分类项本身已经说明了这是分类），
+  // 分类改为一行横向滑动。
+  // ============================================================
+  @media (max-width: 768px) {
+    .search_type_list {
+      p {
+        display: none;
+      }
+
+      .tag {
+        width: 100%;
+      }
+
+      .item_box {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        // 滚动条在手机上是多余的视觉噪音
+        scrollbar-width: none;
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
+
+      .search_type_item {
+        flex: 0 0 auto;
+        white-space: nowrap;
+      }
+    }
+  }
 </style>

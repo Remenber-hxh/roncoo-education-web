@@ -4,7 +4,8 @@
       <zone-banner />
       <zone-course />
     </div>
-    <common-link />
+    <!-- 二开：移除友情链接。这是对外门户网站的概念，
+         公司内部培训平台不会往外链，留着只会让页脚显得像个半成品 -->
   </NuxtLayout>
 </template>
 <script setup>

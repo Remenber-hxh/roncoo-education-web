@@ -5,7 +5,7 @@
     <!-- 响应式栅格：手机1列、大手机/小平板2列、平板3列、桌面4列 -->
     <el-col v-for="(course, int) in props.list" :key="int" :xs="24" :sm="12" :md="8" :lg="6" class="zone_body_course">
       <nuxt-link target="_blank" :to="{ name: 'course-detail', query: { id: course.id } }">
-        <img :src="course.courseLogo" alt="" />
+        <course-cover :src="course.courseLogo" :name="course.courseName" />
         <div class="course_name" v-html="course.courseName" />
         <div class="course_desc">
           <div class="collect">

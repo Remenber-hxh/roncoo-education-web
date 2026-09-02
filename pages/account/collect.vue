@@ -3,7 +3,7 @@
     <el-table v-loading="page.loading" :border="false" :data="page.list" :show-header="false">
       <el-table-column label="课程">
         <template #default="scope">
-          <img :src="scope.row.courseResp?.courseLogo" :alt="scope.row.courseResp?.courseName" class="course-img" />
+          <course-cover :src="scope.row.courseResp?.courseLogo" :name="scope.row.courseResp?.courseName" class="course-img" />
           <div class="course-info">
             <div class="course-info-title">{{ scope.row.courseResp?.courseName }}</div>
             <div>学习人数：{{ scope.row.courseResp?.countStudy }}</div>
