@@ -23,8 +23,9 @@
           <common-user />
         </div>
         <div v-else>
+          <!-- 「注册」入口已移除：员工账号由管理员统一导入，
+               内部系统不该让人自行注册，注册流程本身也依赖未配置的短信平台 -->
           <nuxt-link :to="{ name: 'login' }"> 登录</nuxt-link>
-          <nuxt-link :to="{ name: 'register' }"> 注册</nuxt-link>
         </div>
       </div>
     </div>

@@ -30,14 +30,18 @@
                   <el-checkbox v-model="loginForm.isAgreement" size="default">
                     登录即同意<span class="blue_text" @click.stop.prevent="agreementVisible = true">《隐私政策》</span>
                   </el-checkbox>
-                  <nuxt-link :to="{ name: 'reset' }">
-                    <div class="login-info-reset">忘记密码？</div>
-                  </nuxt-link>
+                  <!-- 原为跳「忘记密码」页，那条路要发短信验证码，而平台没配短信平台：
+                       请求会真的去调阿里云、因密钥为空而超时，员工看到的却是
+                       「操作频繁，请稍后再试」这种完全误导的提示。
+                       改成直接说清怎么办，不再把人引进死胡同。 -->
+                  <div class="login-info-reset" @click="forgotVisible = true">忘记密码？</div>
                 </div>
                 <el-button class="login-button" type="primary" size="large" @click="handleLogin()"> 马上登录</el-button>
               </el-form>
-              <div class="login_other">
-                <nuxt-link :to="{ name: 'register' }"> 没有账号，我要注册</nuxt-link>
+              <div class="login_other login_tip">
+                <!-- 原为「没有账号，我要注册」。员工账号由管理员统一导入，
+                     内部系统不该让人自行注册；注册流程本身也依赖短信，同样是断的 -->
+                首次登录请使用本人手机号，初始密码为手机号后 6 位
               </div>
             </div>
           </div>
@@ -64,6 +68,20 @@
         </div>
       </div>
       <common-agreement v-model="agreementVisible" type="privacy" />
+
+      <el-dialog v-model="forgotVisible" title="忘记密码怎么办" width="min(420px, 92vw)" align-center>
+        <div class="forgot-body">
+          <p>本平台的账号由公司统一创建，密码找回需经管理员核实身份，请按以下方式处理：</p>
+          <ol>
+            <li><b>还记得密码</b>：登录后在「个人信息 → 修改密码」里自行修改。</li>
+            <li><b>完全忘记</b>：联系人力资源部重置，重置后密码恢复为本人手机号后 6 位。</li>
+          </ol>
+          <p class="dim">初始密码为手机号后 6 位，建议首次登录后尽快修改。</p>
+        </div>
+        <template #footer>
+          <el-button type="primary" @click="forgotVisible = false">我知道了</el-button>
+        </template>
+      </el-dialog>
     </div>
   </NuxtLayout>
 </template>
@@ -89,6 +107,7 @@
 
   // 隐私政策弹窗
   const agreementVisible = ref(false)
+  const forgotVisible = ref(false)
 
   // 是否为密码登录
   const isPwdLogin = ref(true)
@@ -319,6 +338,8 @@
 
       .login-info-reset {
         color: var(--t-primary);
+        // 改成弹窗触发后不再是链接，得自己声明手型
+        cursor: pointer;
       }
 
       // 原项目引用了 .blue_text 但全局没有定义，链接看起来跟普通文字一样，
@@ -343,6 +364,29 @@
       overflow: hidden;
       text-align: center;
       margin-bottom: 20px;
+    }
+
+    // 首次登录提示不是链接，用弱化的灰色，别和可点的蓝字混淆
+    .login_tip {
+      color: var(--t-text-weak);
+      font-size: 13px;
+    }
+  }
+
+  .forgot-body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--t-text-regular);
+
+    ol {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+
+    .dim {
+      color: var(--t-text-weak);
+      font-size: 13px;
+      margin-bottom: 0;
     }
   }
 

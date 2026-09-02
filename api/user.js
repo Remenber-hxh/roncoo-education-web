@@ -19,6 +19,12 @@ export const userApi = {
     return postRequest('/user/auth/users/head', params)
   },
 
+  // 修改密码。凭原密码改新密码，不依赖短信——
+  // 平台没配短信平台，原有的「忘记密码」走验证码那条路实际是断的
+  usersUpdatePsw: (params = {}) => {
+    return postRequest('/user/auth/users/psw', params)
+  },
+
   // 用户信息
   getUserInfo: () => {
     return getRequest('/user/auth/users/view')

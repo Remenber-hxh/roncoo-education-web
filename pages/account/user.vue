@@ -53,16 +53,35 @@
             <div class="setting-info">
               <img src="../../assets/svg/account/password.svg" width="60px" />
               <div>
-                重置登录密码
+                登录密码
                 <br />
-                ********
+                <span style="color: var(--t-text-weak)">建议首次登录后尽快修改</span>
               </div>
             </div>
-            <el-button text type="primary">
-              <nuxt-link :to="{ name: 'reset' }"> 密码重置 </nuxt-link>
-            </el-button>
+            <!-- 原为跳「密码重置」页，那条路要发短信验证码，而平台没配短信平台，
+                 点进去只会卡在获取验证码那一步。改成凭原密码当场改 -->
+            <el-button text type="primary" @click="openPsw">修改密码</el-button>
           </div>
         </el-card>
+
+        <el-dialog v-model="pswVisible" title="修改密码" width="min(420px, 92vw)" align-center>
+          <el-form ref="pswFormRef" :model="pswForm" :rules="pswRules" label-width="90px" @submit.prevent>
+            <el-form-item label="原密码" prop="oldPwd">
+              <el-input v-model="pswForm.oldPwd" type="password" show-password placeholder="请输入原密码" />
+            </el-form-item>
+            <el-form-item label="新密码" prop="newPwd">
+              <el-input v-model="pswForm.newPwd" type="password" show-password placeholder="至少 6 位" />
+            </el-form-item>
+            <el-form-item label="确认新密码" prop="confirmPwd">
+              <el-input v-model="pswForm.confirmPwd" type="password" show-password placeholder="请再次输入新密码" />
+            </el-form-item>
+          </el-form>
+          <p class="psw-tip">若已完全忘记原密码，请联系人力资源部重置，重置后恢复为手机号后 6 位。</p>
+          <template #footer>
+            <el-button @click="pswVisible = false">取消</el-button>
+            <el-button type="primary" :loading="pswLoading" @click="submitPsw">确定</el-button>
+          </template>
+        </el-dialog>
         <el-card v-if="websiteInfo?.wxPcLoginEnable === '1'" class="account-setting">
           <div class="setting">
             <div class="setting-info">
@@ -89,8 +108,10 @@
   import { userApi } from '~/api/user.js'
   import { uploadApi } from '~/api/upload.js'
   import { ElMessage } from 'element-plus'
-  import { ref } from 'vue'
+  import { ref, reactive } from 'vue'
   import { indexApi } from '~/api'
+  import { encrypt } from '~/utils/base'
+  import { removeToken } from '~/utils/cookie'
 
   const router = useRouter()
   const route = useRoute()
@@ -103,6 +124,67 @@
   const { data: websiteInfo } = await useAsyncData('website', async () => {
     return indexApi.websiteInfo()
   })
+
+  // ---- 修改密码 ----
+  const pswVisible = ref(false)
+  const pswLoading = ref(false)
+  const pswFormRef = ref()
+  const pswForm = reactive({ oldPwd: '', newPwd: '', confirmPwd: '' })
+
+  const pswRules = {
+    oldPwd: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
+    newPwd: [
+      { required: true, message: '请输入新密码', trigger: 'blur' },
+      { min: 6, message: '新密码至少 6 位', trigger: 'blur' },
+      {
+        validator: (rule, value, cb) => (value && value === pswForm.oldPwd ? cb(new Error('新密码不能与原密码相同')) : cb()),
+        trigger: 'blur'
+      }
+    ],
+    confirmPwd: [
+      { required: true, message: '请再次输入新密码', trigger: 'blur' },
+      {
+        validator: (rule, value, cb) => (value !== pswForm.newPwd ? cb(new Error('两次输入的新密码不一致')) : cb()),
+        trigger: 'blur'
+      }
+    ]
+  }
+
+  const openPsw = () => {
+    pswForm.oldPwd = ''
+    pswForm.newPwd = ''
+    pswForm.confirmPwd = ''
+    // 清掉上次留下的校验红字，否则一打开就是一片报错
+    pswFormRef.value?.clearValidate()
+    pswVisible.value = true
+  }
+
+  const submitPsw = async () => {
+    const ok = await pswFormRef.value?.validate().catch(() => false)
+    if (!ok) return
+
+    const publicKey = websiteInfo.value?.rsaLoginPublicKey
+    if (!publicKey) {
+      ElMessage.error('缺少加密公钥，请刷新页面后重试')
+      return
+    }
+
+    pswLoading.value = true
+    try {
+      // 与登录一致：密码走 RSA 加密后再传，不让明文出现在请求体和访问日志里
+      await userApi.usersUpdatePsw({
+        oldPwdEncrypt: encrypt(pswForm.oldPwd, publicKey),
+        newPwdEncrypt: encrypt(pswForm.newPwd, publicKey)
+      })
+      ElMessage.success('密码已修改，请用新密码重新登录')
+      pswVisible.value = false
+      // 密码变了，旧 token 继续用会让人以为没生效，直接退出重登更清楚
+      removeToken()
+      router.push('/login')
+    } finally {
+      pswLoading.value = false
+    }
+  }
 
   onMounted(() => {
     wxCode.value = route.query.code
@@ -317,6 +399,13 @@
     .account-setting {
       width: 100%;
       margin: 12px auto;
+    }
+
+    .psw-tip {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--t-text-weak);
+      line-height: 1.7;
     }
 
     .setting {
