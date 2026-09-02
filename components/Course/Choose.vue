@@ -69,7 +69,7 @@
       font-style: normal;
       font-weight: normal;
       font-size: 14px;
-      color: #333333;
+      color: var(--t-text);
       cursor: pointer;
       margin-right: 10px;
       padding: 5px 8px;
@@ -78,9 +78,9 @@
       }
 
       &.active {
-        color: #3d7fff;
+        color: var(--t-primary);
         font-weight: bold;
-        background: rgba(61, 127, 255, 0.1);
+        background: var(--t-primary-light);
         border-radius: 5px;
       }
     }

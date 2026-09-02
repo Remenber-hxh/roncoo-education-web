@@ -26,7 +26,7 @@
     padding: 20px 0;
     .body-item {
       background: #fff;
-      border: 1px solid #ebeef5;
+      border: 1px solid var(--t-border);
       border-radius: 10px;
       padding: 20px;
       margin-bottom: 20px;

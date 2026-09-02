@@ -27,7 +27,7 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 0 30px 0;
-    background: #f6f8fb;
+    background: var(--t-body-bg);
     .i_zone {
       margin-top: 30px;
       .zone_header {
@@ -44,12 +44,12 @@
         }
         .small_text {
           font-size: 14px;
-          color: #999;
+          color: var(--t-text-weak);
           margin-top: 10px;
         }
         .link_text:hover {
           text-decoration: none;
-          color: #333;
+          color: var(--t-text);
         }
       }
     }

@@ -98,15 +98,15 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #f56c6c;
+    background: var(--t-danger);
     flex: none;
   }
   .subject {
     font-size: 15px;
-    color: #909399;
+    color: var(--t-text-weak);
   }
   .is-unread .subject {
-    color: #303133;
+    color: var(--t-text);
     font-weight: 500;
   }
   .time {

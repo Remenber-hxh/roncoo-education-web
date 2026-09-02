@@ -1,0 +1,103 @@
+// ============================================================
+// 员工端主题令牌（二开）
+//
+// 背景：全站配色原本散在各组件里硬编码——主色出现过 #3d7fff、
+// Element Plus 默认的 #409eff 两套蓝，文字有 #333/#666/#999 三档灰，
+// 想统一调一下要翻十几个文件。
+//
+// 这里的取值与后台 roncoo-education-admin/src/assets/styles/theme.scss
+// 保持一致（主色同为 #3b6ef5）。两端是同一个系统的两个入口，
+// 管理员在后台看到的蓝和员工在员工端看到的蓝不该是两种颜色。
+// 改主色时两边要一起改。
+// ============================================================
+
+:root {
+  // ---- 品牌色 ----
+  --t-primary: #3b6ef5;
+  --t-primary-light: #eaf0ff;
+  --t-primary-dark: #2f59c9;
+
+  --t-success: #26a96a;
+  --t-warning: #e6a23c;
+  --t-danger: #e34d59;
+
+  // ---- 文字 ----
+  // 原来是 #333/#666/#999 三档纯灰。纯灰在蓝色主色旁边显脏，
+  // 这里带一点点蓝偏，和主色是同一个色系
+  --t-text: #1f2733;
+  --t-text-regular: #4b5666;
+  --t-text-weak: #8a94a6;
+  --t-text-placeholder: #a8b0bd;
+
+  // ---- 背景与描边 ----
+  --t-body-bg: #f3f5f9;
+  --t-card-bg: #ffffff;
+  --t-border: #e6e8eb;
+  --t-border-light: #f0f2f5;
+
+  // ---- 圆角与阴影 ----
+  --t-radius: 8px;
+  --t-radius-sm: 4px;
+  --t-shadow: 0 1px 2px rgba(31, 39, 51, 0.06);
+  --t-shadow-hover: 0 4px 16px rgba(31, 39, 51, 0.1);
+
+  // ---- 字号 ----
+  // 原来 body 是 12px，正文偏小；课程名 16px、页脚 12px，中间没有层级。
+  // 定成一套阶梯，组件引用变量而不是各写各的
+  --t-fs-xs: 12px;
+  --t-fs-sm: 13px;
+  --t-fs-base: 14px;
+  --t-fs-md: 16px;
+  --t-fs-lg: 18px;
+  --t-fs-xl: 22px;
+
+  // ---- 覆盖 Element Plus，让按钮、分页、表格跟着主色走 ----
+  --el-color-primary: var(--t-primary);
+  --el-color-primary-light-3: #6c92f8;
+  --el-color-primary-light-5: #9db4fa;
+  --el-color-primary-light-7: #c5d3fc;
+  --el-color-primary-light-9: var(--t-primary-light);
+  --el-color-success: var(--t-success);
+  --el-color-warning: var(--t-warning);
+  --el-color-danger: var(--t-danger);
+  --el-border-radius-base: var(--t-radius-sm);
+  --el-text-color-primary: var(--t-text);
+  --el-text-color-regular: var(--t-text-regular);
+  --el-text-color-secondary: var(--t-text-weak);
+  --el-text-color-placeholder: var(--t-text-placeholder);
+  --el-border-color-lighter: var(--t-border);
+}
+
+// ============================================================
+// 字体
+//
+// 原来没有任何 font-family 声明，全靠浏览器默认——
+// Windows 上落到宋体，中文界面立刻显得很旧。
+// 按平台优先级列出系统自带的无衬线字体，不引外部字体文件
+// （内网环境拉不到 CDN，引了反而会卡住首屏）。
+// ============================================================
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei UI',
+    'Microsoft YaHei',
+    'Source Han Sans SC',
+    'Noto Sans CJK SC',
+    sans-serif;
+  font-size: var(--t-fs-base);
+  color: var(--t-text);
+  background-color: var(--t-body-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 数字用等宽字形，统计数字、成绩、时长纵向对齐时不会参差
+.tabular-nums,
+.el-statistic__number,
+.el-pagination {
+  font-variant-numeric: tabular-nums;
+}

@@ -69,11 +69,13 @@
     height: 70px;
     display: flex;
     justify-content: center;
-    border: 1px solid #ebeef5;
+    border: 1px solid var(--t-border);
   }
 
   .active {
-    color: #46c37b;
+    // 原为绿色 #46c37b，与全站蓝色主色不成一套：
+    // 导航选中是绿的、按钮和链接是蓝的，看着像两个系统拼起来的
+    color: var(--t-primary);
   }
 
   .top {

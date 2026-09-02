@@ -8,7 +8,7 @@
             <el-col :xs="24" :sm="15">
               <el-form-item label="手机：">
                 {{ userInfo.mobile }}
-                <span style="margin-left: 20px; color: #999">不可修改</span>
+                <span style="margin-left: 20px; color: var(--t-text-weak)">不可修改</span>
               </el-form-item>
               <el-form-item label="昵称：">
                 <el-input v-model="userInfo.nickname" size="large" placeholder="请输入昵称" />
@@ -70,8 +70,8 @@
               <div>
                 微信账号绑定
                 <br />
-                <span v-if="userInfo.unionId || userInfo.openId" style="color: #999">已绑定</span>
-                <span v-else style="color: #999">未绑定</span>
+                <span v-if="userInfo.unionId || userInfo.openId" style="color: var(--t-text-weak)">已绑定</span>
+                <span v-else style="color: var(--t-text-weak)">未绑定</span>
               </div>
             </div>
             <el-button text type="primary">
@@ -294,7 +294,7 @@
   .avatar-tip {
     margin-top: 8px;
     font-size: 12px;
-    color: #909399;
+    color: var(--t-text-weak);
     // 不让它在窄列里折成「支持 JPG/PNG，2」+「M 以内」两行
     white-space: nowrap;
   }

@@ -187,7 +187,7 @@
       font-weight: 600;
     }
     .exam-meta {
-      color: #666;
+      color: var(--t-text-regular);
       display: flex;
       align-items: center;
     }
@@ -195,9 +195,9 @@
       margin-left: 16px;
       font-size: 18px;
       font-weight: 600;
-      color: #3d7fff;
+      color: var(--t-primary);
       &.time-warn {
-        color: #f56c6c;
+        color: var(--t-danger);
       }
     }
   }
@@ -220,7 +220,7 @@
         margin-left: 8px;
       }
       .q-score {
-        color: #999;
+        color: var(--t-text-weak);
         font-size: 13px;
       }
     }
@@ -242,7 +242,7 @@
       margin-bottom: 12px;
       .result-total {
         font-size: 24px;
-        color: #999;
+        color: var(--t-text-weak);
         font-weight: 400;
       }
     }
@@ -264,16 +264,16 @@
       }
       .w-line {
         font-size: 13px;
-        color: #666;
+        color: var(--t-text-regular);
         margin-top: 4px;
       }
     }
   }
   .pass {
-    color: #67c23a;
+    color: var(--t-success);
   }
   .fail {
-    color: #f56c6c;
+    color: var(--t-danger);
   }
   .exam-loading {
     background: #fff;

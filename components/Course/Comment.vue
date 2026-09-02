@@ -82,7 +82,7 @@
   .course_comment_list {
     padding: 20px 20px 0 20px;
     .course_comment_item {
-      border-bottom: 1px solid #ebeef5;
+      border-bottom: 1px solid var(--t-border);
       display: flex;
       padding-bottom: 20px;
       padding-top: 20px;
@@ -95,7 +95,7 @@
     .course_comment_content {
       width: calc(100% - 68px);
       .course_comment_int {
-        color: #999;
+        color: var(--t-text-weak);
         font-size: 14px;
         font-style: normal;
         font-weight: 400;

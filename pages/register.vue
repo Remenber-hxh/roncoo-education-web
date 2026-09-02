@@ -118,7 +118,7 @@
 </script>
 <style lang="scss" scoped>
   .login_body {
-    background-color: #2256f7;
+    background-color: var(--t-primary);
     min-height: calc(100vh - 130px);
     .login_box {
       width: 100%;
@@ -152,7 +152,7 @@
           font-weight: bold;
         }
         a {
-          color: #2256f7;
+          color: var(--t-primary);
         }
       }
       .login-button {

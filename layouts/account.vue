@@ -93,9 +93,9 @@
         margin: 10px;
       }
       .is-active {
-        background: rgba(61, 127, 255, 0.1);
+        background: var(--t-primary-light);
         border-radius: 4px;
-        color: #3d7fff;
+        color: var(--t-primary);
       }
     }
     .img-icon {

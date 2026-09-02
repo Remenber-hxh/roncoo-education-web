@@ -43,7 +43,7 @@
       z-index: 1000;
       display: flex;
       background: #fff;
-      border-top: 1px solid #ebeef5;
+      border-top: 1px solid var(--t-border);
       // 全面屏底部有安全区，不加会被小横条压住
       padding-bottom: env(safe-area-inset-bottom);
     }
@@ -56,12 +56,12 @@
       justify-content: center;
       gap: 2px;
       height: 52px;
-      color: #909399;
+      color: var(--t-text-weak);
       font-size: 11px;
       text-decoration: none;
 
       &.active {
-        color: #2256f6;
+        color: var(--t-primary);
       }
     }
 

@@ -56,7 +56,7 @@
                     </template>
                   </el-input>
                 </el-form-item>
-                <div style="color: #999; margin-bottom: 74px">若手机号没注册，则会自动注册</div>
+                <div style="color: var(--t-text-weak); margin-bottom: 74px">若手机号没注册，则会自动注册</div>
                 <el-button class="login-button" type="primary" size="large" @click="handleBinding()"> 绑定登录 </el-button>
               </el-form>
             </div>
@@ -256,7 +256,7 @@
 </script>
 <style lang="scss" scoped>
   .login_body {
-    background-color: #2256f7;
+    background-color: var(--t-primary);
     min-height: calc(100vh - 130px);
 
     .login_box {
@@ -306,7 +306,7 @@
     }
 
     .login_title {
-      color: #2256f6;
+      color: var(--t-primary);
       font-size: 24px;
       margin: 20px auto;
       text-align: center;
@@ -318,13 +318,13 @@
       justify-content: space-between;
 
       .login-info-reset {
-        color: #2256f6;
+        color: var(--t-primary);
       }
 
       // 原项目引用了 .blue_text 但全局没有定义，链接看起来跟普通文字一样，
       // 没有任何可点击的提示
       .blue_text {
-        color: #2256f6;
+        color: var(--t-primary);
         cursor: pointer;
 
         &:hover {
@@ -338,7 +338,7 @@
     }
 
     .login_other {
-      color: #2256f6;
+      color: var(--t-primary);
       font-size: 14px;
       overflow: hidden;
       text-align: center;

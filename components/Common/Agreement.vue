@@ -59,7 +59,7 @@
   .agreement-content {
     font-size: 14px;
     line-height: 1.8;
-    color: #333;
+    color: var(--t-text);
     // 富文本里可能带宽图或宽表格，限制住避免撑破弹窗
     :deep(img),
     :deep(table) {

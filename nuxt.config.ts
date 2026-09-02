@@ -5,7 +5,8 @@ export default defineNuxtConfig({
   experimental: {
     asyncContext: true
   },
-  css: ['~/assets/styles/main.scss'],
+  // theme 在前：main.scss 里的规则会用到它定义的 CSS 变量
+  css: ['~/assets/styles/theme.scss', '~/assets/styles/main.scss'],
   modules: ['@element-plus/nuxt', '@vueuse/nuxt'],
   nitro: {
     devProxy: {

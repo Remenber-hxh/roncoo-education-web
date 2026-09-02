@@ -586,12 +586,12 @@
           padding: 12px 24px;
           border-bottom: 1px solid #eee;
           font-size: 13px;
-          color: #666;
+          color: var(--t-text-regular);
           flex-shrink: 0;
         }
 
         .article-done {
-          color: #67c23a;
+          color: var(--t-success);
           font-weight: 600;
         }
 
@@ -602,7 +602,7 @@
           padding: 24px 32px;
           line-height: 1.9;
           font-size: 15px;
-          color: #333;
+          color: var(--t-text);
 
           :deep(img) {
             max-width: 100%;
@@ -618,7 +618,7 @@
             }
           }
           :deep(a) {
-            color: #409eff;
+            color: var(--t-primary);
           }
         }
 
@@ -632,12 +632,12 @@
 
         .article-sign-tip {
           margin-left: 12px;
-          color: #999;
+          color: var(--t-text-weak);
           font-size: 12px;
         }
 
         .article-signed {
-          color: #67c23a;
+          color: var(--t-success);
           font-weight: 600;
         }
 
@@ -674,12 +674,12 @@
             }
 
             &:hover {
-              background-color: #333;
+              background-color: var(--t-text);
             }
           }
 
           .on {
-            background-color: #333;
+            background-color: var(--t-text);
           }
         }
 
@@ -688,7 +688,7 @@
         }
 
         .video-info-content {
-          background-color: #333;
+          background-color: var(--t-text);
           color: #fff;
           width: 400px;
           padding: 20px;
@@ -728,7 +728,7 @@
           }
 
           .on {
-            color: #2256f6;
+            color: var(--t-primary);
           }
         }
       }

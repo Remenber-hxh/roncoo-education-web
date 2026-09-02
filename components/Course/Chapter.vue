@@ -77,7 +77,7 @@
     .chapter_name {
       font-size: 14px;
       font-weight: 700;
-      color: #333;
+      color: var(--t-text);
       padding-bottom: 10px;
     }
   }
@@ -92,7 +92,7 @@
       height: 26px;
       text-align: center;
       line-height: 26px;
-      color: #999;
+      color: var(--t-text-weak);
       position: absolute;
       right: 0;
       top: 10px;

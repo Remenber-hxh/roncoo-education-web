@@ -110,11 +110,11 @@
         border-radius: 10px 0 0 10px;
         margin: 0 8px;
         a {
-          color: #d51423;
+          color: var(--t-primary);
         }
 
         .arrow {
-          border-color: #d51423;
+          border-color: var(--t-primary);
         }
       }
     }
@@ -124,7 +124,7 @@
       display: block;
 
       &:hover {
-        color: #d51423;
+        color: var(--t-primary);
       }
     }
   }
@@ -184,12 +184,12 @@
 
     .three_link {
       font-size: 14px;
-      color: #999;
+      color: var(--t-text-weak);
       display: inline-block;
       margin-right: 20px;
 
       &:hover {
-        color: #d51423;
+        color: var(--t-primary);
       }
     }
   }
@@ -250,25 +250,25 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      color: #333;
+      color: var(--t-text);
       top: 0;
 
       &:hover {
         text-decoration: none;
-        color: #d51423;
+        color: var(--t-primary);
       }
     }
 
     .course_price {
       position: absolute;
-      color: #999;
+      color: var(--t-text-weak);
       bottom: 2px;
     }
   }
 
   a {
     &:hover {
-      color: #d51423;
+      color: var(--t-primary);
       text-decoration: none;
     }
   }

@@ -130,7 +130,7 @@
 <style lang="scss" scoped>
   .detail_content {
     background: #fff;
-    color: #999;
+    color: var(--t-text-weak);
     font-size: 14px;
     .detail_body {
       width: 100%;
@@ -189,23 +189,13 @@
           }
         }
 
-        .view_price {
-          background: #f5f5f5;
-          color: rgb(102, 102, 102);
-          padding: 15px 10px;
-          margin: 10px 0;
-          span {
-            font-size: 20px;
-            color: #d51423;
-            font-weight: bold;
-            margin-left: 20px;
-          }
-        }
+        // 原有 .view_price 课程售价样式已删除：
+        // 商品/售卖模块二开时已移除，模板里早就没有对应节点了
 
         .view_info_course {
           font-size: 18px;
           margin: 5px 0;
-          color: #333;
+          color: var(--t-text);
           height: 25px;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -226,7 +216,7 @@
           display: block;
           width: 136px;
           height: 36px;
-          background: #2256f6;
+          background: var(--t-primary);
           color: #fff;
           border: none;
           border-radius: 6px;
@@ -242,7 +232,7 @@
         .handle_info_btn {
           display: flex;
           align-items: center;
-          color: #999;
+          color: var(--t-text-weak);
           font-size: 14px;
         }
       }
@@ -260,7 +250,7 @@
       .introduce {
         font-size: 14px;
         line-height: 30px;
-        color: #333;
+        color: var(--t-text);
         padding-left: 8px;
       }
     }

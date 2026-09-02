@@ -16,12 +16,13 @@ $bp-pad: 1024px;
 body {
   margin: 0;
   padding: 0;
-  font-size: 12px;
-  background-color: #f6f8fb;
+  // 字号、颜色、背景、字体统一由 theme.scss 的令牌决定，这里不再各写一份
   // 原为 height:100vh + overflow:hidden，页面级滚动被关掉、滚动交给内部容器。
   // 手机上地址栏收缩、软键盘弹出都会打乱 100vh 的计算，故放开由页面自然滚动。
   min-height: 100vh;
-  word-break: break-all;
+  // 原为 break-all：中英混排时会把英文单词从中间截断。
+  // break-word 只在必要时断词，中文换行不受影响
+  word-break: break-word;
 }
 a {
   text-decoration: none;
