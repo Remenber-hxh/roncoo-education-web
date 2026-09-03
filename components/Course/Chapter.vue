@@ -6,8 +6,10 @@
         <span>第{{ index + 1 }}章&nbsp;&nbsp;</span>{{ one.chapterName }}
       </div>
       <div v-for="(two, num) in one.periodRespList" :key="num" class="period_info">
-        <div class="period_top" :class="{ on: playPeriod == two.id }" @click="handlePlayVideo(two)">
+        <div class="period_top" :class="{ on: playPeriod == two.id, locked: two.unlocked === false }" @click="handlePlayVideo(two)">
           <span class="period_num">第{{ num + 1 }}讲</span>
+          <!-- 顺序解锁（闯关）：未解锁的课时加锁标并置灰 -->
+          <span v-if="two.unlocked === false" class="lock-icon" :title="two.lockedReason || '未解锁'">🔒</span>
           <span style="margin-right: 5px">
             <el-tag v-if="two.periodType === 10">{{ getResourceTypeName(two.resourceResp?.resourceType) }}</el-tag>
           </span>
@@ -25,6 +27,7 @@
 
 <script setup>
   import { formatTime, getResourceTypeName } from '~/utils/base.js'
+  import { ElMessage } from 'element-plus'
 
   const router = useRouter()
   const route = useRoute()
@@ -43,6 +46,11 @@
   })
 
   function handlePlayVideo(period) {
+    // 顺序解锁（闯关）：未解锁的课时点了给出明确原因，而不是静默无反应
+    if (period.unlocked === false) {
+      ElMessage.warning(period.lockedReason || '请先完成上一课时')
+      return
+    }
     // 资源
     router.push('/course/study?id=' + route.query.id + '&periodId=' + period.id)
   }
@@ -117,6 +125,19 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    // 顺序解锁（闯关）：未解锁的课时压暗。
+    // 仍然保留 pointer 而不是 not-allowed —— 点击会给出「请先完成上一课时」，
+    // 用 not-allowed 会让人以为坏了，不知道为什么点不动
+    &.locked {
+      color: var(--t-text-placeholder);
+      background: var(--t-border-light);
+    }
+
+    .lock-icon {
+      margin-right: 4px;
+      font-size: 12px;
+    }
 
     .video_time {
       position: absolute;
